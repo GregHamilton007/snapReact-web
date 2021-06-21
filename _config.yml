@@ -25,9 +25,9 @@ description: >- # this means to ignore newlines until "baseurl:"
   feedback on your photos from the public. Users can use this feedback to determine 
   which photos to post to social media, dating, business or photography profiles for 
   personal or marketing purposes.
-domain: greghamilton007.github.io
-baseurl: /snapReact-web # the subpath of your site, e.g. /blog
-url: greghamilton007.github.io # the base hostname & protocol for your site, e.g. http://example.com
+# domain: greghamilton007.github.io
+# baseurl: /snapReact-web # the subpath of your site, e.g. /blog
+# url: greghamilton007.github.io # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: snapreact
 # github_username:  snapreact
 logo: icon_reactsmall.jpeg
