@@ -5,4 +5,6 @@
 # layout: home
 layout: default
 ---
-# This is a test
+[Terms and Conditions](termsandconditions.md)
+
+[Privacy Policy](privacypolicy.md)
