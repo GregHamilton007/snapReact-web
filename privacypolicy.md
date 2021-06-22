@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-**Privacy Policy**
+# Privacy Policy
 
 Snapreact built the Snapreact app as a Free app. This SERVICE is provided by Snapreact at no cost and is intended for use as is.
 
