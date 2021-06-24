@@ -3,7 +3,7 @@ layout: default
 ---
 # How to delete your account
 
-To delete your data from <em>snapreact</em> follow the following steps:
+To delete your data from <em>snapreact</em>, follow these steps:
 
 ## 1. Navigate to the profile settings screen
 
