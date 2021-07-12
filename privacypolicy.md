@@ -62,4 +62,4 @@ This policy is effective as of 2021-06-17
 
 **Contact Us**
 
-If you have any questions or suggestions about <em>Snapreact's</em> Privacy Policy, do not hesitate to contact us at snapreact-support@algoci.com.
+If you have any questions or suggestions about <em>Snapreact's</em> Privacy Policy, do not hesitate to contact us at [snapreact-support@algoci.com](snapreact-support@algoci.com).
