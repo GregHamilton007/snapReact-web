@@ -33,4 +33,4 @@ These terms and conditions are effective as of 2021-06-17
 
 **Contact Us**
 
-If you have any questions or suggestions about <em>Snapreact's</em> Terms and Conditions, do not hesitate to contact us at snapreactteam@gmail.com.
+If you have any questions or suggestions about <em>Snapreact's</em> Terms and Conditions, do not hesitate to contact us at [snapreact-support@algoci.com](mailto:snapreact-support@algoci.com).
