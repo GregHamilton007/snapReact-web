@@ -6,10 +6,11 @@
 layout: default
 ---
 
-ryan
 
 [Terms and Conditions](termsandconditions.md)
 
 [Privacy Policy](privacypolicy.md)
 
 [How to delete your account](delete.md)
+
+[Download Travel Time Heatmap](travel_time_heatmap_driving_Wellington_St_Ottawa_ON_K1A_0A9.html)
