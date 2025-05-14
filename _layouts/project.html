@@ -1,0 +1,125 @@
+---
+layout: default
+---
+<div class="project-container">
+    <nav class="project-nav">
+        <a href="/" class="home-link">← Back to JourneyHue</a>
+    </nav>
+
+    <header class="project-header">
+        <h1>{{ page.title }}</h1>
+        <p class="project-description">{{ page.description }}</p>
+    </header>
+
+    <div class="project-content">
+        {{ content }}
+    </div>
+
+    <div class="project-features">
+        <h2>Key Features</h2>
+        <ul>
+            {% for feature in page.features %}
+            <li>{{ feature }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<style>
+    .project-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .project-nav {
+        margin-bottom: 2rem;
+    }
+
+    .home-link {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .home-link:hover {
+        text-decoration: underline;
+    }
+
+    .project-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .project-header h1 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+    }
+
+    .project-description {
+        font-size: 1.2rem;
+        color: #34495e;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .project-content {
+        margin-bottom: 3rem;
+    }
+
+    .project-content h2 {
+        color: #2c3e50;
+        margin: 2rem 0 1rem;
+    }
+
+    .project-content h3 {
+        color: #34495e;
+        margin: 1.5rem 0 1rem;
+    }
+
+    .project-content ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    .project-content li {
+        margin-bottom: 0.5rem;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+
+    .project-content li:before {
+        content: "•";
+        color: #3498db;
+        position: absolute;
+        left: 0;
+    }
+
+    .project-features {
+        background: #f8f9fa;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-top: 3rem;
+    }
+
+    .project-features h2 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+    }
+
+    .project-features ul {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .project-features li {
+        background: white;
+        padding: 1rem;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+</style>
