@@ -31,9 +31,9 @@ logo: icon_reactsmall.jpeg
 show_downloads: false
 
 # Build settings
-# theme: minima
+theme: minima
 # theme: jekyll-theme-minimal
-theme: jekyll-theme-cayman
+#theme: jekyll-theme-cayman
 plugins:
   - jekyll-feed
 
