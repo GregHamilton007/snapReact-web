@@ -1,18 +1,18 @@
 ---
 layout: default
-title: About Alogci
-permalink: /about-alogci/
+title: About algoci
+permalink: /about-algoci/
 ---
 
 <div class="about-container">
   <div class="about-header">
-    <h1>About Alogci</h1>
+    <h1>About algoci</h1>
     <p class="subtitle">Transforming Ideas into Digital Reality</p>
   </div>
 
   <div class="about-section">
     <h2>Our Mission</h2>
-    <p>At Alogci, we're dedicated to creating innovative technology solutions that empower businesses and individuals to achieve their goals. We believe in the power of technology to transform ideas into reality, making complex processes simpler and more efficient.</p>
+    <p>At algoci, we're dedicated to creating innovative technology solutions that empower businesses and individuals to achieve their goals. We believe in the power of technology to transform ideas into reality, making complex processes simpler and more efficient.</p>
   </div>
 
   <div class="about-section">
@@ -42,7 +42,7 @@ permalink: /about-alogci/
   </div>
 
   <div class="about-section">
-    <h2>Why Choose Alogci?</h2>
+    <h2>Why Choose algoci?</h2>
     <ul class="benefits-list">
       <li>Expert team with deep technical knowledge</li>
       <li>Proven track record of successful projects</li>

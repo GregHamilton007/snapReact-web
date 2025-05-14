@@ -4,21 +4,21 @@
 
 # layout: home
 layout: default
-title: Alogci - Innovation Hub
+title: algoci - Innovation Hub
 ---
 
 <div class="hero">
-  <h1>Welcome to Alogci</h1>
+  <h1>Welcome to algoci</h1>
   <p class="lead">Empowering innovation through technology and data-driven solutions</p>
   <div class="hero-buttons">
     <a href="#projects" class="button primary">Explore Our Projects</a>
-    <a href="/about-alogci" class="button secondary">About Us</a>
+    <a href="/about-algoci" class="button secondary">About Us</a>
   </div>
 </div>
 
 <div class="about-section">
   <h2>Who We Are</h2>
-  <p>Alogci is a forward-thinking technology company dedicated to creating innovative solutions that make a difference. We combine cutting-edge technology with deep domain expertise to deliver exceptional results for our clients and partners.</p>
+  <p>algoci is a forward-thinking technology company dedicated to creating innovative solutions that make a difference. We combine cutting-edge technology with deep domain expertise to deliver exceptional results for our clients and partners.</p>
 </div>
 
 <div id="projects" class="projects-grid">

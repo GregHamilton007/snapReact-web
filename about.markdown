@@ -20,7 +20,7 @@ You can find the source code for Jekyll at GitHub:
 
 ---
 layout: default
-title: About Alogci
+title: About algoci
 ---
 
 
