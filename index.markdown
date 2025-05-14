@@ -12,7 +12,7 @@ title: Alogci - Innovation Hub
   <p class="lead">Empowering innovation through technology and data-driven solutions</p>
   <div class="hero-buttons">
     <a href="#projects" class="button primary">Explore Our Projects</a>
-    <a href="/about" class="button secondary">About Us</a>
+    <a href="/about-alogci" class="button secondary">About Us</a>
   </div>
 </div>
 
