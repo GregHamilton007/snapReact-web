@@ -59,6 +59,12 @@ title: algoci - Innovation Hub
   </div>
 </div>
 
+<div class="contact-section">
+  <h2>Get in Touch</h2>
+  <p>Have questions or want to learn more about our services?</p>
+  <a href="mailto:management@algoci.com" class="button primary">Email Us</a>
+</div>
+
 <style>
 .hero {
   text-align: center;
@@ -195,6 +201,25 @@ title: algoci - Innovation Hub
   color: #34495e;
   font-size: 1.2rem;
   line-height: 1.6;
+}
+
+.contact-section {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #f8f9fa;
+  margin-top: 2rem;
+}
+
+.contact-section h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+}
+
+.contact-section p {
+  color: #34495e;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
 }
 
 @media (max-width: 768px) {
