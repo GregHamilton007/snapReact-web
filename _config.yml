@@ -18,7 +18,6 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Algoci
 # email: support@snapreact.com
 url: https://www.algoci.com
 baseurl: ""
@@ -27,7 +26,6 @@ baseurl: ""
 # url: greghamilton007.github.io # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: snapreact
 # github_username:  snapreact
-logo: icon_reactsmall.jpeg
 show_downloads: false
 
 # Build settings
