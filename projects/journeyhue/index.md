@@ -29,11 +29,9 @@ title: JourneyHue - Interactive Travel Time Visualization
     <h2>Try It Out</h2>
     <p>Experience JourneyHue's capabilities with our interactive demo:</p>
     <div class="demo-container">
-      <iframe 
-        src="/travel_time_heatmap_driving_Wellington_St_Ottawa_ON_K1A_0A9.html"
-        style="width: 100%; height: 600px; border: none; border-radius: 4px;"
-        title="JourneyHue Travel Time Heatmap Demo"
-      ></iframe>
+      <a href="/maps/travel_time_heatmap_driving_Wellington_St_Ottawa_ON_K1A_0A9.html" class="demo-link">
+        View Travel Time Heatmap Demo
+      </a>
     </div>
   </section>
 </div>
@@ -98,6 +96,21 @@ h2 {
   padding: 2rem;
   border-radius: 8px;
   text-align: center;
+}
+
+.demo-link {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background-color: #3498db;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+}
+
+.demo-link:hover {
+  background-color: #2980b9;
 }
 
 .coming-soon {
