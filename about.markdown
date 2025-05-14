@@ -20,52 +20,10 @@ You can find the source code for Jekyll at GitHub:
 
 ---
 layout: default
-title: About JourneyHue
+title: About Alogci
 ---
 
-<div class="about-container">
-  <header class="about-header">
-    <h1>About JourneyHue</h1>
-    <p class="lead">Transforming how we understand and visualize travel possibilities</p>
-  </header>
 
-  <section class="about-section">
-    <h2>Our Mission</h2>
-    <p>At JourneyHue, we're dedicated to revolutionizing how people in the hospitality and housing market understand and communicate travel possibilities. Our interactive tools help visualize what's possible within specific time frames, making it easier to showcase the value of locations and properties.</p>
-  </section>
-
-  <section class="about-section">
-    <h2>What We Do</h2>
-    <div class="features-grid">
-      <div class="feature-card">
-        <h3>Interactive Heatmaps</h3>
-        <p>Create dynamic visualizations of travel times and accessibility for any location.</p>
-      </div>
-      <div class="feature-card">
-        <h3>Location Analytics</h3>
-        <p>Analyze and understand the value of locations based on travel times and nearby amenities.</p>
-      </div>
-      <div class="feature-card">
-        <h3>Custom Solutions</h3>
-        <p>Tailored tools for real estate, hospitality, and urban planning professionals.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="about-section">
-    <h2>Our Technology</h2>
-    <p>We leverage cutting-edge mapping and data visualization technologies to create intuitive, powerful tools that help our users make better decisions about locations and properties.</p>
-  </section>
-
-  <section class="about-section">
-    <h2>Get Started</h2>
-    <p>Ready to transform how you visualize and communicate travel possibilities? Explore our tools and see how JourneyHue can help you showcase the value of your locations.</p>
-    <div class="cta-buttons">
-      <a href="/" class="button primary">View Our Tools</a>
-      <a href="mailto:contact@journeyhue.com" class="button secondary">Contact Us</a>
-    </div>
-  </section>
-</div>
 
 <style>
 .about-container {
