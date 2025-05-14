@@ -1,7 +1,7 @@
 ---
 layout: default
 title: JourneyHue - Interactive Travel Time Visualization
-permalink: /projects/JourneyHue/Home/
+permalink: /projects/journeyhue/home/
 ---
 
 <div class="project-header">
