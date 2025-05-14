@@ -24,14 +24,14 @@ title: algoci - Innovation Hub
 <div id="projects" class="projects-grid">
   <div class="project-card">
     <div class="project-icon">🗺️</div>
-    <h2>Travel Time Heatmap</h2>
+    <h2>JourneyHue</h2>
     <p>Interactive visualization of travel times and nearby amenities</p>
     <div class="project-tags">
       <span class="tag">Maps</span>
       <span class="tag">Real Estate</span>
       <span class="tag">Analytics</span>
     </div>
-    <a href="/projects/travel-time-heatmap" class="button">View Project</a>
+    <a href="/projects/JourneyHue/home" class="button">View Project</a>
   </div>
 
   <div class="project-card">
