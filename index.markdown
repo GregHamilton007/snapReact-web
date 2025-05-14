@@ -4,16 +4,21 @@
 
 # layout: home
 layout: default
-title: JourneyHue - Interactive Travel Time Visualization
+title: Alogci - Innovation Hub
 ---
 
 <div class="hero">
-  <h1>JourneyHue</h1>
-  <p class="lead">Visualizing travel possibilities and nearby amenities for the hospitality and housing market</p>
+  <h1>Welcome to Alogci</h1>
+  <p class="lead">Empowering innovation through technology and data-driven solutions</p>
   <div class="hero-buttons">
-    <a href="#projects" class="button primary">View Projects</a>
-    <a href="/about" class="button secondary">Learn More</a>
+    <a href="#projects" class="button primary">Explore Our Projects</a>
+    <a href="/about" class="button secondary">About Us</a>
   </div>
+</div>
+
+<div class="about-section">
+  <h2>Who We Are</h2>
+  <p>Alogci is a forward-thinking technology company dedicated to creating innovative solutions that make a difference. We combine cutting-edge technology with deep domain expertise to deliver exceptional results for our clients and partners.</p>
 </div>
 
 <div id="projects" class="projects-grid">
@@ -28,29 +33,29 @@ title: JourneyHue - Interactive Travel Time Visualization
     </div>
     <a href="/projects/travel-time-heatmap" class="button">View Project</a>
   </div>
-  
-  <div class="project-card coming-soon">
-    <div class="project-icon">🏨</div>
-    <h2>Hotel Analytics</h2>
-    <p>Coming soon: Advanced analytics for hotel locations and amenities</p>
+
+  <div class="project-card">
+    <div class="project-icon">📊</div>
+    <h2>Data Analytics Platform</h2>
+    <p>Advanced analytics and visualization tools for business intelligence</p>
     <div class="project-tags">
-      <span class="tag">Hotels</span>
       <span class="tag">Analytics</span>
-      <span class="tag">Coming Soon</span>
+      <span class="tag">Business Intelligence</span>
+      <span class="tag">Data Science</span>
     </div>
-    <button class="button disabled">Coming Soon</button>
+    <a href="#" class="button disabled">Coming Soon</a>
   </div>
 
-  <div class="project-card coming-soon">
-    <div class="project-icon">🏠</div>
-    <h2>Property Insights</h2>
-    <p>Coming soon: Deep insights into property locations and neighborhood data</p>
+  <div class="project-card">
+    <div class="project-icon">🤖</div>
+    <h2>AI Solutions</h2>
+    <p>Custom AI and machine learning solutions for your business needs</p>
     <div class="project-tags">
-      <span class="tag">Real Estate</span>
-      <span class="tag">Analytics</span>
-      <span class="tag">Coming Soon</span>
+      <span class="tag">AI</span>
+      <span class="tag">Machine Learning</span>
+      <span class="tag">Automation</span>
     </div>
-    <button class="button disabled">Coming Soon</button>
+    <a href="#" class="button disabled">Coming Soon</a>
   </div>
 </div>
 
@@ -171,6 +176,25 @@ title: JourneyHue - Interactive Travel Time Visualization
 
 .coming-soon {
   opacity: 0.8;
+}
+
+.about-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.about-section h2 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+}
+
+.about-section p {
+  color: #34495e;
+  font-size: 1.2rem;
+  line-height: 1.6;
 }
 
 @media (max-width: 768px) {
