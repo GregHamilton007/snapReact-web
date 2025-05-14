@@ -35,7 +35,7 @@ title: JourneyHue - Interactive Travel Time Visualization
 
   <section class="custom-request">
     <h2>Request a Custom Map</h2>
-    <p>Don't see your location in our demos? We can create a custom travel time heatmap for your area! Simply email us at <a href="mailto:management@algoci.com">management@algoci.com</a> with your desired location, and we'll do our best to generate a personalized map for you for free.</p>
+    <p> We can create a custom travel time heatmap for your area! Simply email us at <a href="mailto:management@algoci.com">management@algoci.com</a> with your desired location, and we'll do our best to generate a personalized map for you for free.</p>
   </section>
 </div>
 
