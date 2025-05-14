@@ -31,7 +31,7 @@ title: algoci - Innovation Hub
       <span class="tag">Real Estate</span>
       <span class="tag">Analytics</span>
     </div>
-    <a href="/projects/JourneyHue/home" class="button">View Project</a>
+    <a href="/_projects/JourneyHue/home" class="button">View Project</a>
   </div>
 
   <div class="project-card">
