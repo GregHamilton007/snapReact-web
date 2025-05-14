@@ -11,17 +11,15 @@ title: JourneyHue - Interactive Travel Time Visualization
 <div class="project-content">
   <section class="project-overview">
     <h2>Project Overview</h2>
-    <p>JourneyHue is an innovative tool that helps users visualize travel times and discover nearby amenities in their area. Using advanced mapping technology and real-time data, JourneyHue provides an intuitive interface for exploring accessibility and convenience factors in any location.</p>
+    <p>JourneyHue is an innovative tool that helps users visualize travel times and discover nearby amenities for a given area. Using advanced mapping technology and real-time data, JourneyHue provides an intuitive interface for exploring accessibility and convenience factors in any location.</p>
   </section>
 
   <section class="features">
     <h2>Key Features</h2>
     <ul>
       <li>Interactive travel time heatmaps</li>
-      <li>Real-time traffic data integration</li>
       <li>Nearby amenities discovery</li>
       <li>Customizable visualization options</li>
-      <li>Export and sharing capabilities</li>
     </ul>
   </section>
 
