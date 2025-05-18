@@ -20,7 +20,7 @@
 
 title: ALGOCI
 email: management@algoci.com
-url: https://www.algoci.com
+url: "https://www.algoci.com"
 baseurl: ""
 # domain: greghamilton007.github.io
 # baseurl: /snapReact-web # the subpath of your site, e.g. /blog
