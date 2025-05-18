@@ -21,7 +21,7 @@
 title: ALGOCI
 email: management@algoci.com
 url: "https://www.algoci.com"
-baseurl: ""
+baseurl: "https://www.algoci.com"
 # domain: greghamilton007.github.io
 # baseurl: /snapReact-web # the subpath of your site, e.g. /blog
 # url: greghamilton007.github.io # the base hostname & protocol for your site, e.g. http://example.com
