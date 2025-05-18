@@ -18,6 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
+title: ALGOCI
 email: management@algoci.com
 # domain: greghamilton007.github.io
 # baseurl: /snapReact-web # the subpath of your site, e.g. /blog
