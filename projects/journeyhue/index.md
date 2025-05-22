@@ -46,8 +46,20 @@ title: JourneyHue - Interactive Travel Time Visualization
     <p>Help us understand what locations are important to you! Submit an address you'd like to see analyzed:</p>
     <form id="locationForm" class="submission-form">
       <div class="form-group">
-        <label for="address">Address:</label>
-        <input type="text" id="address" name="address" required placeholder="e.g., 123 Main St, Ottawa">
+        <label for="streetAddress">Street Address:</label>
+        <input type="text" id="streetAddress" name="streetAddress" required placeholder="e.g., 123 Main St">
+      </div>
+      <div class="form-group">
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" required placeholder="e.g., Ottawa">
+      </div>
+      <div class="form-group">
+        <label for="province">Province/State:</label>
+        <input type="text" id="province" name="province" required placeholder="e.g., ON">
+      </div>
+      <div class="form-group">
+        <label for="country">Country:</label>
+        <input type="text" id="country" name="country" required placeholder="e.g., Canada">
       </div>
       <div class="form-group">
         <label for="mode">Travel Mode:</label>
@@ -227,11 +239,15 @@ h2 {
 document.getElementById('locationForm').addEventListener('submit', function(e) {
   e.preventDefault();
   
-  const address = document.getElementById('address').value;
+  const streetAddress = document.getElementById('streetAddress').value;
+  const city = document.getElementById('city').value;
+  const province = document.getElementById('province').value;
+  const country = document.getElementById('country').value;
   const mode = document.getElementById('mode').value;
 
+  const fullAddress = `${streetAddress}, ${city}, ${province}, ${country}`;
   const subject = 'New Location Submission for JourneyHue';
-  const body = `New location submission details:\n\nAddress: ${address}\nTravel Mode: ${mode}`;
+  const body = `New location submission details:\n\nFull Address: ${fullAddress}\nTravel Mode: ${mode}`;
   
   const mailtoLink = `mailto:management@algoci.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   
