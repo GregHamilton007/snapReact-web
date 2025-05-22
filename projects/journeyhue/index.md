@@ -245,6 +245,34 @@ h2 {
 </style>
 
 <script>
+// Track map page access
+function trackMapAccess() {
+  const currentPath = window.location.pathname;
+  if (currentPath.includes('/maps/')) {
+    const mapType = currentPath.includes('driving') ? 'driving' : 'walking';
+    const location = currentPath.split('_').pop().replace('.html', '');
+    
+    gtag('event', 'map_access', {
+      'event_category': 'maps',
+      'event_label': `${mapType}_${location}`,
+      'value': 1
+    });
+    
+    // Track map load time
+    window.addEventListener('load', function() {
+      const loadTime = performance.now();
+      gtag('event', 'map_load_time', {
+        'event_category': 'performance',
+        'event_label': mapType,
+        'value': Math.round(loadTime)
+      });
+    });
+  }
+}
+
+// Call the tracking function when the page loads
+trackMapAccess();
+
 // Track time spent on page
 let startTime = Date.now();
 window.addEventListener('beforeunload', function() {
