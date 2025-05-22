@@ -233,36 +233,23 @@ h2 {
 </style>
 
 <script>
-document.getElementById('locationForm').addEventListener('submit', async function(e) {
+document.getElementById('locationForm').addEventListener('submit', function(e) {
   e.preventDefault();
   
-  const formData = {
-    address: document.getElementById('address').value,
-    mode: document.getElementById('mode').value,
-    reason: document.getElementById('reason').value
-  };
+  const address = document.getElementById('address').value;
+  const mode = document.getElementById('mode').value;
+  const reason = document.getElementById('reason').value;
 
-  const statusDiv = document.getElementById('submissionStatus');
+  const subject = 'New Location Submission for JourneyHue';
+  const body = `New location submission details:\n\nAddress: ${address}\nTravel Mode: ${mode}\nReason: ${reason}`;
   
-  try {
-    const response = await fetch('/api/submit-location', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData)
-    });
-
-    if (response.ok) {
-      statusDiv.textContent = 'Location submitted successfully!';
-      statusDiv.className = 'submission-status success';
-      document.getElementById('locationForm').reset();
-    } else {
-      throw new Error('Submission failed');
-    }
-  } catch (error) {
-    statusDiv.textContent = 'Error submitting location. Please try again.';
-    statusDiv.className = 'submission-status error';
-  }
+  const mailtoLink = `mailto:management@algoci.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  
+  window.location.href = mailtoLink;
+  
+  const statusDiv = document.getElementById('submissionStatus');
+  statusDiv.textContent = 'Opening email client...';
+  statusDiv.className = 'submission-status success';
+  document.getElementById('locationForm').reset();
 });
 </script> 
