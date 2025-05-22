@@ -3,6 +3,15 @@ layout: default
 title: JourneyHue - Interactive Travel Time Visualization
 ---
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-409TJVF0YX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-409TJVF0YX');
+</script>
+
 <div class="project-header">
   <h1>JourneyHue</h1>
   <p class="lead">Interactive visualization of travel times and nearby amenities</p>
@@ -245,6 +254,13 @@ document.getElementById('locationForm').addEventListener('submit', function(e) {
   const country = document.getElementById('country').value;
   const mode = document.getElementById('mode').value;
 
+  // Track form submission
+  gtag('event', 'location_submission', {
+    'event_category': 'form',
+    'event_label': mode,
+    'value': 1
+  });
+
   const fullAddress = `${streetAddress}, ${city}, ${province}, ${country}`;
   const subject = 'New Location Submission for JourneyHue';
   const body = `New location submission details:\n\nFull Address: ${fullAddress}\nTravel Mode: ${mode}`;
@@ -257,5 +273,17 @@ document.getElementById('locationForm').addEventListener('submit', function(e) {
   statusDiv.textContent = 'Opening email client...';
   statusDiv.className = 'submission-status success';
   document.getElementById('locationForm').reset();
+});
+
+// Track demo link clicks
+document.querySelectorAll('.demo-link').forEach(link => {
+  link.addEventListener('click', function(e) {
+    const mode = this.textContent.includes('Driving') ? 'driving' : 'walking';
+    gtag('event', 'demo_click', {
+      'event_category': 'demo',
+      'event_label': mode,
+      'value': 1
+    });
+  });
 });
 </script> 
