@@ -245,6 +245,67 @@ h2 {
 </style>
 
 <script>
+// Track time spent on page
+let startTime = Date.now();
+window.addEventListener('beforeunload', function() {
+  const timeSpent = Math.round((Date.now() - startTime) / 1000);
+  gtag('event', 'time_spent', {
+    'event_category': 'engagement',
+    'event_label': 'page_duration',
+    'value': timeSpent
+  });
+});
+
+// Track scroll depth
+let maxScroll = 0;
+window.addEventListener('scroll', function() {
+  const scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
+  if (scrollPercent > maxScroll) {
+    maxScroll = scrollPercent;
+    if (maxScroll % 25 === 0) { // Track at 25%, 50%, 75%, 100%
+      gtag('event', 'scroll_depth', {
+        'event_category': 'engagement',
+        'event_label': `${maxScroll}%`,
+        'value': maxScroll
+      });
+    }
+  }
+});
+
+// Track email link clicks
+document.querySelector('a[href^="mailto:"]').addEventListener('click', function() {
+  gtag('event', 'email_click', {
+    'event_category': 'contact',
+    'event_label': 'custom_map_request'
+  });
+});
+
+// Track section visibility using Intersection Observer
+const sections = document.querySelectorAll('section');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      gtag('event', 'section_view', {
+        'event_category': 'content',
+        'event_label': entry.target.className
+      });
+    }
+  });
+}, { threshold: 0.5 });
+
+sections.forEach(section => observer.observe(section));
+
+// Track feature list interactions
+document.querySelectorAll('.features li').forEach((feature, index) => {
+  feature.addEventListener('click', function() {
+    gtag('event', 'feature_click', {
+      'event_category': 'features',
+      'event_label': this.textContent.trim(),
+      'value': index + 1
+    });
+  });
+});
+
 document.getElementById('locationForm').addEventListener('submit', function(e) {
   e.preventDefault();
   
@@ -255,6 +316,7 @@ document.getElementById('locationForm').addEventListener('submit', function(e) {
   const mode = document.getElementById('mode').value;
 
   // Track form submission
+  console.log('Tracking form submission:', mode);
   gtag('event', 'location_submission', {
     'event_category': 'form',
     'event_label': mode,
@@ -279,6 +341,7 @@ document.getElementById('locationForm').addEventListener('submit', function(e) {
 document.querySelectorAll('.demo-link').forEach(link => {
   link.addEventListener('click', function(e) {
     const mode = this.textContent.includes('Driving') ? 'driving' : 'walking';
+    console.log('Tracking demo click:', mode);
     gtag('event', 'demo_click', {
       'event_category': 'demo',
       'event_label': mode,
@@ -286,4 +349,7 @@ document.querySelectorAll('.demo-link').forEach(link => {
     });
   });
 });
+
+// Verify GA is loaded
+console.log('Google Analytics loaded:', typeof gtag !== 'undefined');
 </script> 
