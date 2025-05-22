@@ -250,11 +250,13 @@ function trackMapAccess() {
   const currentPath = window.location.pathname;
   if (currentPath.includes('/maps/')) {
     const mapType = currentPath.includes('driving') ? 'driving' : 'walking';
-    const location = currentPath.split('_').pop().replace('.html', '');
+    // Extract the full address from the URL
+    const urlParts = currentPath.split('/').pop().replace('.html', '').split('_');
+    const address = urlParts.slice(3).join(' '); // Get everything after the first 3 parts
     
     gtag('event', 'map_access', {
       'event_category': 'maps',
-      'event_label': `${mapType}_${location}`,
+      'event_label': `${mapType}_${address}`,
       'value': 1
     });
     
@@ -263,7 +265,7 @@ function trackMapAccess() {
       const loadTime = performance.now();
       gtag('event', 'map_load_time', {
         'event_category': 'performance',
-        'event_label': mapType,
+        'event_label': `${mapType}_${address}`,
         'value': Math.round(loadTime)
       });
     });
