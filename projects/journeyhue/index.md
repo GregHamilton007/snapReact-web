@@ -56,15 +56,6 @@ title: JourneyHue - Interactive Travel Time Visualization
           <option value="walking">Walking</option>
         </select>
       </div>
-      <div class="form-group">
-        <label for="reason">Reason for Interest:</label>
-        <select id="reason" name="reason" required>
-          <option value="renting">Renting</option>
-          <option value="buying">Buying</option>
-          <option value="business">Business Location</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
       <button type="submit" class="submit-button">Submit Location</button>
     </form>
     <div id="submissionStatus" class="submission-status"></div>
@@ -238,10 +229,9 @@ document.getElementById('locationForm').addEventListener('submit', function(e) {
   
   const address = document.getElementById('address').value;
   const mode = document.getElementById('mode').value;
-  const reason = document.getElementById('reason').value;
 
   const subject = 'New Location Submission for JourneyHue';
-  const body = `New location submission details:\n\nAddress: ${address}\nTravel Mode: ${mode}\nReason: ${reason}`;
+  const body = `New location submission details:\n\nAddress: ${address}\nTravel Mode: ${mode}`;
   
   const mailtoLink = `mailto:management@algoci.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   
