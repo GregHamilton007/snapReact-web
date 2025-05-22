@@ -40,6 +40,35 @@ title: JourneyHue - Interactive Travel Time Visualization
     <h2>Request a Custom Map</h2>
     <p> We can create a custom travel time heatmap for your area! Simply email us at <a href="mailto:management@algoci.com">management@algoci.com</a> with your desired location, and we'll do our best to generate a personalized map for you for free.</p>
   </section>
+
+  <section class="location-submission">
+    <h2>Submit a Location</h2>
+    <p>Help us understand what locations are important to you! Submit an address you'd like to see analyzed:</p>
+    <form id="locationForm" class="submission-form">
+      <div class="form-group">
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" required placeholder="e.g., 123 Main St, Ottawa">
+      </div>
+      <div class="form-group">
+        <label for="mode">Travel Mode:</label>
+        <select id="mode" name="mode" required>
+          <option value="driving">Driving</option>
+          <option value="walking">Walking</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="reason">Reason for Interest:</label>
+        <select id="reason" name="reason" required>
+          <option value="renting">Renting</option>
+          <option value="buying">Buying</option>
+          <option value="business">Business Location</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <button type="submit" class="submit-button">Submit Location</button>
+    </form>
+    <div id="submissionStatus" class="submission-status"></div>
+  </section>
 </div>
 
 <style>
@@ -137,4 +166,103 @@ h2 {
     padding: 1rem;
   }
 }
-</style> 
+
+.location-submission {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.submission-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.submit-button {
+  background-color: #3498db;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #2980b9;
+}
+
+.submission-status {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.submission-status.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.submission-status.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+</style>
+
+<script>
+document.getElementById('locationForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const formData = {
+    address: document.getElementById('address').value,
+    mode: document.getElementById('mode').value,
+    reason: document.getElementById('reason').value
+  };
+
+  const statusDiv = document.getElementById('submissionStatus');
+  
+  try {
+    const response = await fetch('/api/submit-location', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    });
+
+    if (response.ok) {
+      statusDiv.textContent = 'Location submitted successfully!';
+      statusDiv.className = 'submission-status success';
+      document.getElementById('locationForm').reset();
+    } else {
+      throw new Error('Submission failed');
+    }
+  } catch (error) {
+    statusDiv.textContent = 'Error submitting location. Please try again.';
+    statusDiv.className = 'submission-status error';
+  }
+});
+</script> 
