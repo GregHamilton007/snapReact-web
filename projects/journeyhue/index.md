@@ -272,6 +272,65 @@ function trackMapAccess() {
         'value': Math.round(loadTime)
       });
     });
+
+    // Track map interactions
+    if (typeof map !== 'undefined') {
+      // Track panning
+      map.on('moveend', function() {
+        gtag('event', 'map_pan', {
+          'event_category': 'map_interaction',
+          'event_label': `${mapType}_${address}`,
+          'center': map.getCenter().toString(),
+          'zoom': map.getZoom()
+        });
+      });
+
+      // Track zooming
+      map.on('zoomend', function() {
+        gtag('event', 'map_zoom', {
+          'event_category': 'map_interaction',
+          'event_label': `${mapType}_${address}`,
+          'zoom_level': map.getZoom()
+        });
+      });
+
+      // Track layer toggles
+      document.querySelectorAll('.layer-toggle').forEach(toggle => {
+        toggle.addEventListener('change', function() {
+          gtag('event', 'layer_toggle', {
+            'event_category': 'map_interaction',
+            'event_label': `${mapType}_${address}`,
+            'layer_name': this.name,
+            'layer_state': this.checked ? 'on' : 'off'
+          });
+        });
+      });
+
+      // Track marker clicks
+      map.on('click', function(e) {
+        const features = map.queryRenderedFeatures(e.point);
+        if (features.length > 0) {
+          gtag('event', 'marker_click', {
+            'event_category': 'map_interaction',
+            'event_label': `${mapType}_${address}`,
+            'feature_type': features[0].layer.id,
+            'coordinates': e.lngLat.toString()
+          });
+        }
+      });
+
+      // Track heatmap opacity changes
+      const opacitySlider = document.querySelector('input[type="range"]');
+      if (opacitySlider) {
+        opacitySlider.addEventListener('change', function() {
+          gtag('event', 'heatmap_opacity_change', {
+            'event_category': 'map_interaction',
+            'event_label': `${mapType}_${address}`,
+            'opacity_value': this.value
+          });
+        });
+      }
+    }
   }
 }
 
