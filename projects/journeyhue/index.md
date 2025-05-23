@@ -253,10 +253,12 @@ function trackMapAccess() {
     // Extract the full address from the URL
     const urlParts = currentPath.split('/').pop().replace('.html', '').split('_');
     const address = urlParts.slice(3).join(' '); // Get everything after the first 3 parts
+    const filename = currentPath.split('/').pop(); // Get the HTML filename
     
     gtag('event', 'map_access', {
       'event_category': 'maps',
       'event_label': `${mapType}_${address}`,
+      'filename': filename,
       'value': 1
     });
     
@@ -266,6 +268,7 @@ function trackMapAccess() {
       gtag('event', 'map_load_time', {
         'event_category': 'performance',
         'event_label': `${mapType}_${address}`,
+        'filename': filename,
         'value': Math.round(loadTime)
       });
     });
