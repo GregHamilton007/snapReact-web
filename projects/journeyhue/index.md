@@ -245,6 +245,20 @@ h2 {
 </style>
 
 <script>
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAM6U2dy7EKF0ey1TO_YV_WmLZ7YbRUdO4",
+  authDomain: "journeyhue.firebaseapp.com",
+  projectId: "journeyhue",
+  storageBucket: "journeyhue.firebasestorage.app",
+  messagingSenderId: "551447445192",
+  appId: "1:551447445192:web:31a99fc5bc3914be5a6ffd",
+  measurementId: "G-PXY3M7PTNB"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 // Track map page access
 function trackMapAccess() {
   const currentPath = window.location.pathname;
@@ -398,7 +412,7 @@ document.querySelectorAll('.features li').forEach((feature, index) => {
   });
 });
 
-document.getElementById('locationForm').addEventListener('submit', function(e) {
+document.getElementById('locationForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   
   const streetAddress = document.getElementById('streetAddress').value;
@@ -419,14 +433,31 @@ document.getElementById('locationForm').addEventListener('submit', function(e) {
   const subject = 'New Location Submission for JourneyHue';
   const body = `New location submission details:\n\nFull Address: ${fullAddress}\nTravel Mode: ${mode}`;
   
-  const mailtoLink = `mailto:management@algoci.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  
-  window.location.href = mailtoLink;
-  
-  const statusDiv = document.getElementById('submissionStatus');
-  statusDiv.textContent = 'Opening email client...';
-  statusDiv.className = 'submission-status success';
-  document.getElementById('locationForm').reset();
+  try {
+    // Store in Firestore
+    await db.collection('location_submissions').add({
+      streetAddress,
+      city,
+      province,
+      country,
+      mode,
+      fullAddress,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    const mailtoLink = `mailto:management@algoci.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink;
+    
+    const statusDiv = document.getElementById('submissionStatus');
+    statusDiv.textContent = 'Location submitted successfully! Opening email client...';
+    statusDiv.className = 'submission-status success';
+    document.getElementById('locationForm').reset();
+  } catch (error) {
+    console.error('Error storing location:', error);
+    const statusDiv = document.getElementById('submissionStatus');
+    statusDiv.textContent = 'Error submitting location. Please try again.';
+    statusDiv.className = 'submission-status error';
+  }
 });
 
 // Track demo link clicks
@@ -444,4 +475,8 @@ document.querySelectorAll('.demo-link').forEach(link => {
 
 // Verify GA is loaded
 console.log('Google Analytics loaded:', typeof gtag !== 'undefined');
-</script> 
+</script>
+
+<!-- Add Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script> 
