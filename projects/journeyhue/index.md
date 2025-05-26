@@ -84,12 +84,12 @@ title: JourneyHue - Interactive Travel Time Visualization
 </script>
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-409TJVF0YX"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PXY3M7PTNB"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-409TJVF0YX');
+  gtag('config', 'G-PXY3M7PTNB');
 </script>
 
 <div class="project-header">
