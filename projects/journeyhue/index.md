@@ -4,8 +4,30 @@ title: JourneyHue - Interactive Travel Time Visualization
 ---
 
 <!-- Add Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAM6U2dy7EKF0ey1TO_YV_WmLZ7YbRUdO4",
+    authDomain: "journeyhue.firebaseapp.com",
+    projectId: "journeyhue",
+    storageBucket: "journeyhue.firebasestorage.app",
+    messagingSenderId: "551447445192",
+    appId: "1:551447445192:web:31a99fc5bc3914be5a6ffd",
+    measurementId: "G-PXY3M7PTNB"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Make Firebase available globally
+  window.firebaseApp = app;
+  window.firestore = db;
+</script>
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-409TJVF0YX"></script>
@@ -249,23 +271,7 @@ h2 {
 </style>
 
 <script>
-// Wait for Firebase to be loaded
 document.addEventListener('DOMContentLoaded', function() {
-  // Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyAM6U2dy7EKF0ey1TO_YV_WmLZ7YbRUdO4",
-    authDomain: "journeyhue.firebaseapp.com",
-    projectId: "journeyhue",
-    storageBucket: "journeyhue.firebasestorage.app",
-    messagingSenderId: "551447445192",
-    appId: "1:551447445192:web:31a99fc5bc3914be5a6ffd",
-    measurementId: "G-PXY3M7PTNB"
-  };
-
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
   // Track map page access
   function trackMapAccess() {
     const currentPath = window.location.pathname;
@@ -441,15 +447,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const body = `New location submission details:\n\nFull Address: ${fullAddress}\nTravel Mode: ${mode}`;
     
     try {
-      // Store in Firestore
-      await db.collection('location_submissions').add({
+      // Store in Firestore using the modular API
+      const { collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+      await addDoc(collection(window.firestore, 'location_submissions'), {
         streetAddress,
         city,
         province,
         country,
         mode,
         fullAddress,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        timestamp: serverTimestamp()
       });
 
       const mailtoLink = `mailto:management@algoci.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
