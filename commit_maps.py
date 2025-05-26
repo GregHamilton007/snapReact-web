@@ -9,6 +9,12 @@ def get_untracked_files():
                           capture_output=True, text=True)
     return result.stdout.strip().split('\n')
 
+def get_modified_files():
+    # Get list of modified files
+    result = subprocess.run(['git', 'ls-files', '--modified'], 
+                          capture_output=True, text=True)
+    return result.stdout.strip().split('\n')
+
 def get_map_name(file_path):
     # Extract map name from the filename
     filename = os.path.basename(file_path)
@@ -35,14 +41,16 @@ def push_changes():
 def main():
     maps_dir = "/Users/ryanhamilton/pythonenv/tfdemo/snapReact-web/maps"
     
-    # Get all untracked files
+    # Get all untracked and modified files
     untracked_files = get_untracked_files()
+    modified_files = get_modified_files()
     
     # Filter for HTML files in the maps directory
-    html_files = [f for f in untracked_files if f.endswith('.html') and f.startswith('maps/')]
+    html_files = [f for f in untracked_files + modified_files 
+                 if f.endswith('.html') and f.startswith('maps/')]
     
     if not html_files:
-        print("No untracked HTML files found in maps directory")
+        print("No untracked or modified HTML files found in maps directory")
         return
     
     # Commit each file
