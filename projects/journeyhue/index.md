@@ -50,8 +50,6 @@ title: JourneyHue - Interactive Travel Time Visualization
         });
 
         const fullAddress = `${streetAddress}, ${city}, ${province}, ${country}`;
-        const subject = 'New Location Submission for JourneyHue';
-        const body = `New location submission details:\n\nFull Address: ${fullAddress}\nTravel Mode: ${mode}`;
         
         try {
           // Store in Firestore
@@ -64,12 +62,9 @@ title: JourneyHue - Interactive Travel Time Visualization
             fullAddress,
             timestamp: serverTimestamp()
           });
-
-          const mailtoLink = `mailto:management@algoci.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-          window.location.href = mailtoLink;
           
           const statusDiv = document.getElementById('submissionStatus');
-          statusDiv.textContent = 'Location submitted successfully! Opening email client...';
+          statusDiv.textContent = 'Location submitted successfully!';
           statusDiv.className = 'submission-status success';
           form.reset();
         } catch (error) {
