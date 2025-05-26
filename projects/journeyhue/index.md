@@ -3,6 +3,10 @@ layout: default
 title: JourneyHue - Interactive Travel Time Visualization
 ---
 
+<!-- Add Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-409TJVF0YX"></script>
 <script>
@@ -245,238 +249,238 @@ h2 {
 </style>
 
 <script>
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAM6U2dy7EKF0ey1TO_YV_WmLZ7YbRUdO4",
-  authDomain: "journeyhue.firebaseapp.com",
-  projectId: "journeyhue",
-  storageBucket: "journeyhue.firebasestorage.app",
-  messagingSenderId: "551447445192",
-  appId: "1:551447445192:web:31a99fc5bc3914be5a6ffd",
-  measurementId: "G-PXY3M7PTNB"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// Wait for Firebase to be loaded
+document.addEventListener('DOMContentLoaded', function() {
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAM6U2dy7EKF0ey1TO_YV_WmLZ7YbRUdO4",
+    authDomain: "journeyhue.firebaseapp.com",
+    projectId: "journeyhue",
+    storageBucket: "journeyhue.firebasestorage.app",
+    messagingSenderId: "551447445192",
+    appId: "1:551447445192:web:31a99fc5bc3914be5a6ffd",
+    measurementId: "G-PXY3M7PTNB"
+  };
 
-// Track map page access
-function trackMapAccess() {
-  const currentPath = window.location.pathname;
-  if (currentPath.includes('/maps/')) {
-    const mapType = currentPath.includes('driving') ? 'driving' : 'walking';
-    // Extract the full address from the URL
-    const urlParts = currentPath.split('/').pop().replace('.html', '').split('_');
-    const address = urlParts.slice(3).join(' '); // Get everything after the first 3 parts
-    const filename = currentPath.split('/').pop(); // Get the HTML filename
-    
-    gtag('event', 'map_access', {
-      'event_category': 'maps',
-      'event_label': `${mapType}_${address}`,
-      'filename': filename,
-      'value': 1
-    });
-    
-    // Track map load time
-    window.addEventListener('load', function() {
-      const loadTime = performance.now();
-      gtag('event', 'map_load_time', {
-        'event_category': 'performance',
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // Track map page access
+  function trackMapAccess() {
+    const currentPath = window.location.pathname;
+    if (currentPath.includes('/maps/')) {
+      const mapType = currentPath.includes('driving') ? 'driving' : 'walking';
+      // Extract the full address from the URL
+      const urlParts = currentPath.split('/').pop().replace('.html', '').split('_');
+      const address = urlParts.slice(3).join(' '); // Get everything after the first 3 parts
+      const filename = currentPath.split('/').pop(); // Get the HTML filename
+      
+      gtag('event', 'map_access', {
+        'event_category': 'maps',
         'event_label': `${mapType}_${address}`,
         'filename': filename,
-        'value': Math.round(loadTime)
+        'value': 1
       });
-    });
-
-    // Track map interactions
-    if (typeof map !== 'undefined') {
-      // Track panning
-      map.on('moveend', function() {
-        gtag('event', 'map_pan', {
-          'event_category': 'map_interaction',
+      
+      // Track map load time
+      window.addEventListener('load', function() {
+        const loadTime = performance.now();
+        gtag('event', 'map_load_time', {
+          'event_category': 'performance',
           'event_label': `${mapType}_${address}`,
-          'center': map.getCenter().toString(),
-          'zoom': map.getZoom()
+          'filename': filename,
+          'value': Math.round(loadTime)
         });
       });
 
-      // Track zooming
-      map.on('zoomend', function() {
-        gtag('event', 'map_zoom', {
-          'event_category': 'map_interaction',
-          'event_label': `${mapType}_${address}`,
-          'zoom_level': map.getZoom()
-        });
-      });
-
-      // Track layer toggles
-      document.querySelectorAll('.layer-toggle').forEach(toggle => {
-        toggle.addEventListener('change', function() {
-          gtag('event', 'layer_toggle', {
+      // Track map interactions
+      if (typeof map !== 'undefined') {
+        // Track panning
+        map.on('moveend', function() {
+          gtag('event', 'map_pan', {
             'event_category': 'map_interaction',
             'event_label': `${mapType}_${address}`,
-            'layer_name': this.name,
-            'layer_state': this.checked ? 'on' : 'off'
+            'center': map.getCenter().toString(),
+            'zoom': map.getZoom()
           });
         });
-      });
 
-      // Track marker clicks
-      map.on('click', function(e) {
-        const features = map.queryRenderedFeatures(e.point);
-        if (features.length > 0) {
-          gtag('event', 'marker_click', {
+        // Track zooming
+        map.on('zoomend', function() {
+          gtag('event', 'map_zoom', {
             'event_category': 'map_interaction',
             'event_label': `${mapType}_${address}`,
-            'feature_type': features[0].layer.id,
-            'coordinates': e.lngLat.toString()
+            'zoom_level': map.getZoom()
+          });
+        });
+
+        // Track layer toggles
+        document.querySelectorAll('.layer-toggle').forEach(toggle => {
+          toggle.addEventListener('change', function() {
+            gtag('event', 'layer_toggle', {
+              'event_category': 'map_interaction',
+              'event_label': `${mapType}_${address}`,
+              'layer_name': this.name,
+              'layer_state': this.checked ? 'on' : 'off'
+            });
+          });
+        });
+
+        // Track marker clicks
+        map.on('click', function(e) {
+          const features = map.queryRenderedFeatures(e.point);
+          if (features.length > 0) {
+            gtag('event', 'marker_click', {
+              'event_category': 'map_interaction',
+              'event_label': `${mapType}_${address}`,
+              'feature_type': features[0].layer.id,
+              'coordinates': e.lngLat.toString()
+            });
+          }
+        });
+
+        // Track heatmap opacity changes
+        const opacitySlider = document.querySelector('input[type="range"]');
+        if (opacitySlider) {
+          opacitySlider.addEventListener('change', function() {
+            gtag('event', 'heatmap_opacity_change', {
+              'event_category': 'map_interaction',
+              'event_label': `${mapType}_${address}`,
+              'opacity_value': this.value
+            });
           });
         }
-      });
-
-      // Track heatmap opacity changes
-      const opacitySlider = document.querySelector('input[type="range"]');
-      if (opacitySlider) {
-        opacitySlider.addEventListener('change', function() {
-          gtag('event', 'heatmap_opacity_change', {
-            'event_category': 'map_interaction',
-            'event_label': `${mapType}_${address}`,
-            'opacity_value': this.value
-          });
-        });
       }
     }
   }
-}
 
-// Call the tracking function when the page loads
-trackMapAccess();
+  // Call the tracking function when the page loads
+  trackMapAccess();
 
-// Track time spent on page
-let startTime = Date.now();
-window.addEventListener('beforeunload', function() {
-  const timeSpent = Math.round((Date.now() - startTime) / 1000);
-  gtag('event', 'time_spent', {
-    'event_category': 'engagement',
-    'event_label': 'page_duration',
-    'value': timeSpent
-  });
-});
-
-// Track scroll depth
-let maxScroll = 0;
-window.addEventListener('scroll', function() {
-  const scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
-  if (scrollPercent > maxScroll) {
-    maxScroll = scrollPercent;
-    if (maxScroll % 25 === 0) { // Track at 25%, 50%, 75%, 100%
-      gtag('event', 'scroll_depth', {
-        'event_category': 'engagement',
-        'event_label': `${maxScroll}%`,
-        'value': maxScroll
-      });
-    }
-  }
-});
-
-// Track email link clicks
-document.querySelector('a[href^="mailto:"]').addEventListener('click', function() {
-  gtag('event', 'email_click', {
-    'event_category': 'contact',
-    'event_label': 'custom_map_request'
-  });
-});
-
-// Track section visibility using Intersection Observer
-const sections = document.querySelectorAll('section');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      gtag('event', 'section_view', {
-        'event_category': 'content',
-        'event_label': entry.target.className
-      });
-    }
-  });
-}, { threshold: 0.5 });
-
-sections.forEach(section => observer.observe(section));
-
-// Track feature list interactions
-document.querySelectorAll('.features li').forEach((feature, index) => {
-  feature.addEventListener('click', function() {
-    gtag('event', 'feature_click', {
-      'event_category': 'features',
-      'event_label': this.textContent.trim(),
-      'value': index + 1
+  // Track time spent on page
+  let startTime = Date.now();
+  window.addEventListener('beforeunload', function() {
+    const timeSpent = Math.round((Date.now() - startTime) / 1000);
+    gtag('event', 'time_spent', {
+      'event_category': 'engagement',
+      'event_label': 'page_duration',
+      'value': timeSpent
     });
   });
-});
 
-document.getElementById('locationForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  
-  const streetAddress = document.getElementById('streetAddress').value;
-  const city = document.getElementById('city').value;
-  const province = document.getElementById('province').value;
-  const country = document.getElementById('country').value;
-  const mode = document.getElementById('mode').value;
-
-  // Track form submission
-  console.log('Tracking form submission:', mode);
-  gtag('event', 'location_submission', {
-    'event_category': 'form',
-    'event_label': mode,
-    'value': 1
+  // Track scroll depth
+  let maxScroll = 0;
+  window.addEventListener('scroll', function() {
+    const scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
+    if (scrollPercent > maxScroll) {
+      maxScroll = scrollPercent;
+      if (maxScroll % 25 === 0) { // Track at 25%, 50%, 75%, 100%
+        gtag('event', 'scroll_depth', {
+          'event_category': 'engagement',
+          'event_label': `${maxScroll}%`,
+          'value': maxScroll
+        });
+      }
+    }
   });
 
-  const fullAddress = `${streetAddress}, ${city}, ${province}, ${country}`;
-  const subject = 'New Location Submission for JourneyHue';
-  const body = `New location submission details:\n\nFull Address: ${fullAddress}\nTravel Mode: ${mode}`;
-  
-  try {
-    // Store in Firestore
-    await db.collection('location_submissions').add({
-      streetAddress,
-      city,
-      province,
-      country,
-      mode,
-      fullAddress,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  // Track email link clicks
+  document.querySelector('a[href^="mailto:"]').addEventListener('click', function() {
+    gtag('event', 'email_click', {
+      'event_category': 'contact',
+      'event_label': 'custom_map_request'
     });
+  });
 
-    const mailtoLink = `mailto:management@algoci.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailtoLink;
+  // Track section visibility using Intersection Observer
+  const sections = document.querySelectorAll('section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        gtag('event', 'section_view', {
+          'event_category': 'content',
+          'event_label': entry.target.className
+        });
+      }
+    });
+  }, { threshold: 0.5 });
+
+  sections.forEach(section => observer.observe(section));
+
+  // Track feature list interactions
+  document.querySelectorAll('.features li').forEach((feature, index) => {
+    feature.addEventListener('click', function() {
+      gtag('event', 'feature_click', {
+        'event_category': 'features',
+        'event_label': this.textContent.trim(),
+        'value': index + 1
+      });
+    });
+  });
+
+  document.getElementById('locationForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
     
-    const statusDiv = document.getElementById('submissionStatus');
-    statusDiv.textContent = 'Location submitted successfully! Opening email client...';
-    statusDiv.className = 'submission-status success';
-    document.getElementById('locationForm').reset();
-  } catch (error) {
-    console.error('Error storing location:', error);
-    const statusDiv = document.getElementById('submissionStatus');
-    statusDiv.textContent = 'Error submitting location. Please try again.';
-    statusDiv.className = 'submission-status error';
-  }
-});
+    const streetAddress = document.getElementById('streetAddress').value;
+    const city = document.getElementById('city').value;
+    const province = document.getElementById('province').value;
+    const country = document.getElementById('country').value;
+    const mode = document.getElementById('mode').value;
 
-// Track demo link clicks
-document.querySelectorAll('.demo-link').forEach(link => {
-  link.addEventListener('click', function(e) {
-    const mode = this.textContent.includes('Driving') ? 'driving' : 'walking';
-    console.log('Tracking demo click:', mode);
-    gtag('event', 'demo_click', {
-      'event_category': 'demo',
+    // Track form submission
+    console.log('Tracking form submission:', mode);
+    gtag('event', 'location_submission', {
+      'event_category': 'form',
       'event_label': mode,
       'value': 1
     });
+
+    const fullAddress = `${streetAddress}, ${city}, ${province}, ${country}`;
+    const subject = 'New Location Submission for JourneyHue';
+    const body = `New location submission details:\n\nFull Address: ${fullAddress}\nTravel Mode: ${mode}`;
+    
+    try {
+      // Store in Firestore
+      await db.collection('location_submissions').add({
+        streetAddress,
+        city,
+        province,
+        country,
+        mode,
+        fullAddress,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      const mailtoLink = `mailto:management@algoci.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailtoLink;
+      
+      const statusDiv = document.getElementById('submissionStatus');
+      statusDiv.textContent = 'Location submitted successfully! Opening email client...';
+      statusDiv.className = 'submission-status success';
+      document.getElementById('locationForm').reset();
+    } catch (error) {
+      console.error('Error storing location:', error);
+      const statusDiv = document.getElementById('submissionStatus');
+      statusDiv.textContent = 'Error submitting location. Please try again.';
+      statusDiv.className = 'submission-status error';
+    }
   });
+
+  // Track demo link clicks
+  document.querySelectorAll('.demo-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+      const mode = this.textContent.includes('Driving') ? 'driving' : 'walking';
+      console.log('Tracking demo click:', mode);
+      gtag('event', 'demo_click', {
+        'event_category': 'demo',
+        'event_label': mode,
+        'value': 1
+      });
+    });
+  });
+
+  // Verify GA is loaded
+  console.log('Google Analytics loaded:', typeof gtag !== 'undefined');
 });
-
-// Verify GA is loaded
-console.log('Google Analytics loaded:', typeof gtag !== 'undefined');
-</script>
-
-<!-- Add Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script> 
+</script> 
