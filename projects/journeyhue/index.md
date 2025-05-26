@@ -39,6 +39,7 @@ title: JourneyHue - Interactive Travel Time Visualization
         const city = document.getElementById('city').value;
         const province = document.getElementById('province').value;
         const country = document.getElementById('country').value;
+        const email = document.getElementById('email').value;
         const mode = document.getElementById('mode').value;
 
         // Track form submission
@@ -58,6 +59,7 @@ title: JourneyHue - Interactive Travel Time Visualization
             city,
             province,
             country,
+            email,
             mode,
             fullAddress,
             timestamp: serverTimestamp()
@@ -144,6 +146,10 @@ title: JourneyHue - Interactive Travel Time Visualization
       <div class="form-group">
         <label for="country">Country:</label>
         <input type="text" id="country" name="country" required placeholder="e.g., Canada">
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required placeholder="e.g., your.email@example.com">
       </div>
       <div class="form-group">
         <label for="mode">Travel Mode:</label>
