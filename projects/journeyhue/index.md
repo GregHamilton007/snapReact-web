@@ -440,14 +440,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Track email link clicks
-  document.querySelector('a[href^="mailto:"]').addEventListener('click', function() {
-    gtag('event', 'email_click', {
-      'event_category': 'contact',
-      'event_label': 'custom_map_request'
-    });
-  });
-
   // Track section visibility using Intersection Observer
   const sections = document.querySelectorAll('section');
   const observer = new IntersectionObserver((entries) => {
