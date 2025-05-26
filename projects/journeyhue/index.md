@@ -27,6 +27,60 @@ title: JourneyHue - Interactive Travel Time Visualization
   // Make Firebase available globally
   window.firebaseApp = app;
   window.firestore = db;
+
+  // Initialize form submission handler
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('locationForm');
+    if (form) {
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const streetAddress = document.getElementById('streetAddress').value;
+        const city = document.getElementById('city').value;
+        const province = document.getElementById('province').value;
+        const country = document.getElementById('country').value;
+        const mode = document.getElementById('mode').value;
+
+        // Track form submission
+        console.log('Tracking form submission:', mode);
+        gtag('event', 'location_submission', {
+          'event_category': 'form',
+          'event_label': mode,
+          'value': 1
+        });
+
+        const fullAddress = `${streetAddress}, ${city}, ${province}, ${country}`;
+        const subject = 'New Location Submission for JourneyHue';
+        const body = `New location submission details:\n\nFull Address: ${fullAddress}\nTravel Mode: ${mode}`;
+        
+        try {
+          // Store in Firestore
+          await addDoc(collection(db, 'location_submissions'), {
+            streetAddress,
+            city,
+            province,
+            country,
+            mode,
+            fullAddress,
+            timestamp: serverTimestamp()
+          });
+
+          const mailtoLink = `mailto:management@algoci.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+          window.location.href = mailtoLink;
+          
+          const statusDiv = document.getElementById('submissionStatus');
+          statusDiv.textContent = 'Location submitted successfully! Opening email client...';
+          statusDiv.className = 'submission-status success';
+          form.reset();
+        } catch (error) {
+          console.error('Error storing location:', error);
+          const statusDiv = document.getElementById('submissionStatus');
+          statusDiv.textContent = 'Error submitting location. Please try again.';
+          statusDiv.className = 'submission-status error';
+        }
+      });
+    }
+  });
 </script>
 
 <!-- Google tag (gtag.js) -->
@@ -423,55 +477,6 @@ document.addEventListener('DOMContentLoaded', function() {
         'value': index + 1
       });
     });
-  });
-
-  document.getElementById('locationForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const streetAddress = document.getElementById('streetAddress').value;
-    const city = document.getElementById('city').value;
-    const province = document.getElementById('province').value;
-    const country = document.getElementById('country').value;
-    const mode = document.getElementById('mode').value;
-
-    // Track form submission
-    console.log('Tracking form submission:', mode);
-    gtag('event', 'location_submission', {
-      'event_category': 'form',
-      'event_label': mode,
-      'value': 1
-    });
-
-    const fullAddress = `${streetAddress}, ${city}, ${province}, ${country}`;
-    const subject = 'New Location Submission for JourneyHue';
-    const body = `New location submission details:\n\nFull Address: ${fullAddress}\nTravel Mode: ${mode}`;
-    
-    try {
-      // Store in Firestore using the modular API
-      const { collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-      await addDoc(collection(window.firestore, 'location_submissions'), {
-        streetAddress,
-        city,
-        province,
-        country,
-        mode,
-        fullAddress,
-        timestamp: serverTimestamp()
-      });
-
-      const mailtoLink = `mailto:management@algoci.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      window.location.href = mailtoLink;
-      
-      const statusDiv = document.getElementById('submissionStatus');
-      statusDiv.textContent = 'Location submitted successfully! Opening email client...';
-      statusDiv.className = 'submission-status success';
-      document.getElementById('locationForm').reset();
-    } catch (error) {
-      console.error('Error storing location:', error);
-      const statusDiv = document.getElementById('submissionStatus');
-      statusDiv.textContent = 'Error submitting location. Please try again.';
-      statusDiv.className = 'submission-status error';
-    }
   });
 
   // Track demo link clicks
