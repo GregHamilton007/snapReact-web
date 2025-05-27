@@ -41,6 +41,9 @@ title: JourneyHue - Interactive Travel Time Visualization
         const country = document.getElementById('country').value;
         const email = document.getElementById('email').value;
         const mode = document.getElementById('mode').value;
+        const interestAddresses = Array.from(document.querySelectorAll('.interest-address-input'))
+          .map(input => input.value)
+          .filter(address => address.trim() !== '');
 
         // Track form submission
         console.log('Tracking form submission:', mode);
@@ -61,6 +64,7 @@ title: JourneyHue - Interactive Travel Time Visualization
             country,
             email,
             mode,
+            interestAddresses,
             fullAddress,
             timestamp: serverTimestamp()
           });
@@ -157,6 +161,16 @@ title: JourneyHue - Interactive Travel Time Visualization
           <option value="driving">Driving</option>
           <option value="walking">Walking</option>
         </select>
+      </div>
+      <div class="form-group">
+        <label>Locations of Interest:</label>
+        <div id="interestAddresses">
+          <div class="interest-address">
+            <input type="text" class="interest-address-input" placeholder="Enter address of interest" required>
+            <button type="button" class="remove-address" onclick="removeAddress(this)" style="display: none;">×</button>
+          </div>
+        </div>
+        <button type="button" class="add-address-button" onclick="addAddressField()">+ Add Another Location</button>
       </div>
       <button type="submit" class="submit-button">Submit Location</button>
     </form>
@@ -323,6 +337,62 @@ h2 {
   background-color: #f8d7da;
   color: #721c24;
 }
+
+.form-group select[multiple] {
+  height: 120px;
+}
+
+.form-text {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.interest-address {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.interest-address-input {
+  flex: 1;
+}
+
+.remove-address {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-address:hover {
+  background-color: #c82333;
+}
+
+.add-address-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.add-address-button:hover {
+  background-color: #218838;
+}
 </style>
 
 <script>
@@ -488,4 +558,32 @@ document.addEventListener('DOMContentLoaded', function() {
   // Verify GA is loaded
   console.log('Google Analytics loaded:', typeof gtag !== 'undefined');
 });
+
+function addAddressField() {
+  const container = document.getElementById('interestAddresses');
+  const newAddress = document.createElement('div');
+  newAddress.className = 'interest-address';
+  newAddress.innerHTML = `
+    <input type="text" class="interest-address-input" placeholder="Enter address of interest" required>
+    <button type="button" class="remove-address" onclick="removeAddress(this)">×</button>
+  `;
+  container.appendChild(newAddress);
+  
+  // Show remove buttons if there's more than one address
+  const removeButtons = document.querySelectorAll('.remove-address');
+  removeButtons.forEach(button => {
+    button.style.display = removeButtons.length > 1 ? 'block' : 'none';
+  });
+}
+
+function removeAddress(button) {
+  const addressContainer = button.parentElement;
+  addressContainer.remove();
+  
+  // Hide remove button if only one address remains
+  const removeButtons = document.querySelectorAll('.remove-address');
+  if (removeButtons.length === 1) {
+    removeButtons[0].style.display = 'none';
+  }
+}
 </script> 
