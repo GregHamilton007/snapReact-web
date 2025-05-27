@@ -163,7 +163,7 @@ title: JourneyHue - Interactive Travel Time Visualization
         </select>
       </div>
       <div class="form-group">
-        <label>Locations of Interest:</label>
+        <label>Locations you wish to travel to from start location: </label>
         <div id="interestAddresses">
           <div class="interest-address">
             <input type="text" class="interest-address-input" placeholder="Enter address of interest" required>
