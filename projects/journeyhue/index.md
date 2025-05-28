@@ -70,7 +70,7 @@ title: JourneyHue - Interactive Travel Time Visualization
           });
           
           const statusDiv = document.getElementById('submissionStatus');
-          statusDiv.textContent = 'Location submitted successfully!';
+          statusDiv.textContent = 'Location submitted successfully! Please wait about 5 minutes to receive an email with your HTML link.';
           statusDiv.className = 'submission-status success';
           
           // Clear only the main form fields, not interest addresses
