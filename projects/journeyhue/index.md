@@ -72,7 +72,14 @@ title: JourneyHue - Interactive Travel Time Visualization
           const statusDiv = document.getElementById('submissionStatus');
           statusDiv.textContent = 'Location submitted successfully!';
           statusDiv.className = 'submission-status success';
-          form.reset();
+          
+          // Clear only the main form fields, not interest addresses
+          document.getElementById('streetAddress').value = '';
+          document.getElementById('city').value = '';
+          document.getElementById('province').value = '';
+          document.getElementById('country').value = '';
+          document.getElementById('email').value = '';
+          document.getElementById('mode').value = 'driving';
         } catch (error) {
           console.error('Error storing location:', error);
           const statusDiv = document.getElementById('submissionStatus');
@@ -163,7 +170,7 @@ title: JourneyHue - Interactive Travel Time Visualization
         </select>
       </div>
       <div class="form-group">
-        <label>Locations you wish to travel to from start location: </label>
+        <label>Locations you wish to travel to often from start location: </label>
         <div id="interestAddresses">
           <div class="interest-address">
             <input type="text" class="interest-address-input" placeholder="Enter address of interest" required>
