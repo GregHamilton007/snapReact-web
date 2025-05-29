@@ -35,19 +35,7 @@ title: JourneyHue - Interactive Travel Time Visualization
       form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        const addressFormat = document.querySelector('input[name="addressFormat"]:checked').value;
-        let fullAddress;
-        
-        if (addressFormat === 'single') {
-          fullAddress = document.getElementById('fullAddress').value;
-        } else {
-          const streetAddress = document.getElementById('streetAddress').value;
-          const city = document.getElementById('city').value;
-          const province = document.getElementById('province').value;
-          const country = document.getElementById('country').value;
-          fullAddress = `${streetAddress}, ${city}, ${province}, ${country}`;
-        }
-
+        const fullAddress = document.getElementById('fullAddress').value;
         const email = document.getElementById('email').value;
         const mode = document.getElementById('mode').value;
         const interestAddresses = Array.from(document.querySelectorAll('.interest-address-input'))
@@ -77,14 +65,7 @@ title: JourneyHue - Interactive Travel Time Visualization
           statusDiv.className = 'submission-status success';
           
           // Clear form fields
-          if (addressFormat === 'single') {
-            document.getElementById('fullAddress').value = '';
-          } else {
-            document.getElementById('streetAddress').value = '';
-            document.getElementById('city').value = '';
-            document.getElementById('province').value = '';
-            document.getElementById('country').value = '';
-          }
+          document.getElementById('fullAddress').value = '';
           document.getElementById('email').value = '';
           document.getElementById('mode').value = 'driving';
         } catch (error) {
@@ -150,39 +131,8 @@ title: JourneyHue - Interactive Travel Time Visualization
     <p>Help us understand what locations are important to you! Submit an address you'd like to see analyzed:</p>
     <form id="locationForm" class="submission-form">
       <div class="form-group">
-        <label>Address Format:</label>
-        <div class="address-format-toggle">
-          <label>
-            <input type="radio" name="addressFormat" value="single" checked> Single Field
-          </label>
-          <label>
-            <input type="radio" name="addressFormat" value="multiple"> Multiple Fields
-          </label>
-        </div>
-      </div>
-
-      <div id="singleAddressField" class="form-group">
-        <label for="fullAddress">Full Address:</label>
-        <input type="text" id="fullAddress" name="fullAddress" placeholder="e.g., 123 Main St, Ottawa, ON, Canada">
-      </div>
-
-      <div id="multipleAddressFields" class="form-group" style="display: none;">
-        <div class="form-group">
-          <label for="streetAddress">Street Address:</label>
-          <input type="text" id="streetAddress" name="streetAddress" placeholder="e.g., 123 Main St">
-        </div>
-        <div class="form-group">
-          <label for="city">City:</label>
-          <input type="text" id="city" name="city" placeholder="e.g., Ottawa">
-        </div>
-        <div class="form-group">
-          <label for="province">Province/State:</label>
-          <input type="text" id="province" name="province" placeholder="e.g., ON">
-        </div>
-        <div class="form-group">
-          <label for="country">Country:</label>
-          <input type="text" id="country" name="country" placeholder="e.g., Canada">
-        </div>
+        <label for="fullAddress">Full Start Address:</label>
+        <input type="text" id="fullAddress" name="fullAddress" required placeholder="e.g., 123 Main St, Ottawa, ON, Canada">
       </div>
 
       <div class="form-group">
@@ -200,7 +150,7 @@ title: JourneyHue - Interactive Travel Time Visualization
         <label>Frequently visited destinations from your starting point: (personal markers)</label>
         <div id="interestAddresses">
           <div class="interest-address">
-            <input type="text" class="interest-address-input" placeholder="Enter address of interest" required>
+            <input type="text" class="interest-address-input" placeholder="e.g., 123 Main St, Ottawa, ON, Canada" required>
             <button type="button" class="remove-address" onclick="removeAddress(this)" style="display: none;">×</button>
           </div>
         </div>
@@ -427,24 +377,6 @@ h2 {
 .add-address-button:hover {
   background-color: #218838;
 }
-
-.address-format-toggle {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 1rem;
-}
-
-.address-format-toggle label {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-}
-
-.address-format-toggle input[type="radio"] {
-  width: auto;
-  margin: 0;
-}
 </style>
 
 <script>
@@ -609,30 +541,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Verify GA is loaded
   console.log('Google Analytics loaded:', typeof gtag !== 'undefined');
-
-  // Add address format toggle functionality
-  const addressFormatRadios = document.querySelectorAll('input[name="addressFormat"]');
-  const singleAddressField = document.getElementById('singleAddressField');
-  const multipleAddressFields = document.getElementById('multipleAddressFields');
-
-  addressFormatRadios.forEach(radio => {
-    radio.addEventListener('change', function() {
-      if (this.value === 'single') {
-        singleAddressField.style.display = 'block';
-        multipleAddressFields.style.display = 'none';
-        // Clear multiple fields
-        document.getElementById('streetAddress').value = '';
-        document.getElementById('city').value = '';
-        document.getElementById('province').value = '';
-        document.getElementById('country').value = '';
-      } else {
-        singleAddressField.style.display = 'none';
-        multipleAddressFields.style.display = 'block';
-        // Clear single field
-        document.getElementById('fullAddress').value = '';
-      }
-    });
-  });
 });
 
 function addAddressField() {
