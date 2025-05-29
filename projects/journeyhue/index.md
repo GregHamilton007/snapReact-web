@@ -66,8 +66,6 @@ title: JourneyHue - Interactive Travel Time Visualization
           
           // Clear form fields
           document.getElementById('fullAddress').value = '';
-          document.getElementById('email').value = '';
-          document.getElementById('mode').value = 'driving';
         } catch (error) {
           console.error('Error storing location:', error);
           const statusDiv = document.getElementById('submissionStatus');
