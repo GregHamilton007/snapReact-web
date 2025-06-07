@@ -110,10 +110,10 @@ title: JourneyHue - Interactive Travel Time Visualization
     <h2>Try It Out</h2>
     <p>Experience JourneyHue's capabilities with our interactive demo:</p>
     <div class="demo-container">
-      <a href="/maps/travel_time_heatmap_driving_Wellington_St_Ottawa_ON_K1A_0A9.html" class="demo-link">
+      <a href="/maps/demo_parliament_driving_heatmap.html" class="demo-link">
         View Driving Time Heatmap Demo
       </a>
-      <a href="/maps/travel_time_heatmap_walking_Wellington_St_Ottawa_ON_K1A_0A9.html" class="demo-link" style="margin-left: 1rem;">
+      <a href="/maps/demo_parliament_walking_heatmap.html" class="demo-link" style="margin-left: 1rem;">
         View Walking Time Heatmap Demo
       </a>
     </div>
