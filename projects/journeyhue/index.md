@@ -117,6 +117,22 @@ title: JourneyHue - Interactive Travel Time Visualization
         View Walking Time Heatmap Demo
       </a>
     </div>
+    
+    <div class="video-demo">
+      <h3>Watch JourneyHue in Action</h3>
+      <p>See how JourneyHue works with this demo video:</p>
+      <div class="video-container">
+        <iframe 
+          width="100%" 
+          height="400" 
+          src="https://www.youtube.com/embed/1xgIGHIpeIU" 
+          title="JourneyHue Demo Video" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
   </section>
 
   <section class="custom-request">
@@ -237,9 +253,38 @@ h2 {
   background-color: #2980b9;
 }
 
-.coming-soon {
-  color: #7f8c8d;
-  font-style: italic;
+.video-demo {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.video-demo h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.video-demo p {
+  color: #34495e;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.video-container iframe {
+  display: block;
+  width: 100%;
+  height: 400px;
+  border: none;
 }
 
 @media (max-width: 768px) {
@@ -254,6 +299,23 @@ h2 {
   .project-content {
     padding: 1rem;
   }
+  
+  .video-container iframe {
+    height: 250px;
+  }
+  
+  .video-demo h3 {
+    font-size: 1.3rem;
+  }
+  
+  .video-demo p {
+    font-size: 1rem;
+  }
+}
+
+.coming-soon {
+  color: #7f8c8d;
+  font-style: italic;
 }
 
 .location-submission {
