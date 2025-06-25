@@ -128,7 +128,7 @@ title: JourneyHue - Interactive Travel Time Visualization
         <iframe 
           width="100%" 
           height="400" 
-          src="https://www.youtube.com/embed/suBZllkLAq8" 
+          src="https://www.youtube.com/embed/hy5TGc7Sk2c" 
           title="JourneyHue Demo Video" 
           frameborder="0" 
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
