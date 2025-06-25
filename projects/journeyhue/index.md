@@ -192,7 +192,7 @@ title: JourneyHue - Interactive Travel Time Visualization
 }
 
 .project-logo {
-  max-width: 800px;
+  max-width: 600px;
   height: auto;
   border-radius: 8px;
   background: transparent;
