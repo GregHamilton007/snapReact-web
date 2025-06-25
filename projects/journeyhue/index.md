@@ -88,7 +88,7 @@ title: JourneyHue - Interactive Travel Time Visualization
 
 <div class="project-header">
   <div class="logo-container">
-    <img src="/logo_jouneyHUE.jpg" alt="JourneyHue Logo" class="project-logo">
+    <img src="/logo_JourneyHue.png" alt="JourneyHue Logo" class="project-logo">
   </div>
   <h1>JourneyHue</h1>
   <p class="lead">Interactive visualization of travel times and nearby amenities</p>
@@ -196,6 +196,8 @@ title: JourneyHue - Interactive Travel Time Visualization
   height: auto;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: transparent;
+  mix-blend-mode: multiply;
 }
 
 .project-header h1 {
