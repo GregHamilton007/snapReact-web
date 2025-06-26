@@ -167,7 +167,7 @@ title: JourneyHue - Interactive Travel Time Visualization
         <label>Frequently visited destinations from your starting point: (personal markers)</label>
         <div id="interestAddresses">
           <div class="interest-address">
-            <input type="text" class="interest-address-input" placeholder="e.g., 123 Main St, Ottawa, ON, Canada" required>
+            <input type="text" class="interest-address-input" placeholder="e.g., 123 Main St, Ottawa, ON, Canada">
             <button type="button" class="remove-address" onclick="removeAddress(this)" style="display: none;">×</button>
           </div>
         </div>
@@ -627,7 +627,7 @@ function addAddressField() {
   const newAddress = document.createElement('div');
   newAddress.className = 'interest-address';
   newAddress.innerHTML = `
-    <input type="text" class="interest-address-input" placeholder="Enter address of interest" required>
+    <input type="text" class="interest-address-input" placeholder="Enter address of interest">
     <button type="button" class="remove-address" onclick="removeAddress(this)">×</button>
   `;
   container.appendChild(newAddress);
