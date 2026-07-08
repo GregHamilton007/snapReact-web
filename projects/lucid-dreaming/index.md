@@ -180,10 +180,27 @@ permalink: /projects/lucid-dreaming/
 
       <div class="review-list-card">
         <div class="review-list-header">
-          <h3>What Readers Are Saying</h3>
-          <button type="button" id="refresh-reviews" class="text-button">Refresh reviews</button>
+          <div>
+            <h3>What Readers Are Saying</h3>
+            <p class="review-list-meta" id="reviews-visible-meta">Showing recent reviews.</p>
+          </div>
+          <div class="review-list-actions">
+            <label class="review-sort-label" for="review-sort">Sort by</label>
+            <select id="review-sort" class="review-sort-select">
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="highest">Highest rated</option>
+              <option value="lowest">Lowest rated</option>
+            </select>
+            <button type="button" id="refresh-reviews" class="text-button">Refresh reviews</button>
+          </div>
         </div>
         <div id="reviews-list" class="reviews-list"></div>
+        <div class="review-pagination" id="review-pagination" hidden>
+          <button type="button" id="reviews-prev" class="pagination-button">Previous</button>
+          <p class="review-pagination-status" id="reviews-page-status">Page 1 of 1</p>
+          <button type="button" id="reviews-next" class="pagination-button">Next</button>
+        </div>
       </div>
     </div>
   </section>
@@ -631,6 +648,44 @@ h2 {
   margin-bottom: 1rem;
 }
 
+.review-list-header h3,
+.review-list-meta,
+.review-pagination-status {
+  margin: 0;
+}
+
+.review-list-meta {
+  color: #58708a;
+  font-size: 0.95rem;
+  margin-top: 0.35rem;
+}
+
+.review-list-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.review-sort-label {
+  color: #58708a;
+  font-size: 0.95rem;
+}
+
+.review-sort-select,
+.pagination-button {
+  border: 1px solid #c5d6e8;
+  border-radius: 999px;
+  background: white;
+  color: #15324b;
+  font: inherit;
+}
+
+.review-sort-select {
+  padding: 0.45rem 0.9rem;
+}
+
 .text-button {
   border: none;
   background: none;
@@ -648,6 +703,26 @@ h2 {
 .reviews-list {
   display: grid;
   gap: 1rem;
+}
+
+.review-pagination {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #dbe6f1;
+}
+
+.pagination-button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .review-card {
@@ -729,6 +804,11 @@ h2 {
     align-items: stretch;
   }
 
+  .review-list-actions,
+  .review-pagination {
+    justify-content: space-between;
+  }
+
   .reviews-grid {
     grid-template-columns: 1fr;
   }
@@ -779,10 +859,20 @@ import {
   const averageRatingStars = document.getElementById("average-rating-stars");
   const reviewCount = document.getElementById("review-count");
   const refreshReviewsButton = document.getElementById("refresh-reviews");
+  const reviewSortSelect = document.getElementById("review-sort");
+  const reviewsVisibleMeta = document.getElementById("reviews-visible-meta");
+  const reviewPagination = document.getElementById("review-pagination");
+  const reviewsPrevButton = document.getElementById("reviews-prev");
+  const reviewsNextButton = document.getElementById("reviews-next");
+  const reviewsPageStatus = document.getElementById("reviews-page-status");
   const pdfViewer = document.getElementById("pdf-viewer");
   const pdfEmbed = document.getElementById("pdf-embed");
   const audioElements = Array.from(document.querySelectorAll(".chapter-item audio"));
   const trackedScrollMarks = new Set();
+  const REVIEWS_PER_PAGE = 6;
+  let allReviews = [];
+  let currentSort = "newest";
+  let currentPage = 1;
   const sessionId = (() => {
     try {
       const key = "lucid_dreaming_book_session_id";
@@ -799,7 +889,21 @@ import {
     }
   })();
 
-  if (!form || !reviewsList || !feedback || !averageRating || !averageRatingStars || !reviewCount || !refreshReviewsButton) {
+  if (
+    !form ||
+    !reviewsList ||
+    !feedback ||
+    !averageRating ||
+    !averageRatingStars ||
+    !reviewCount ||
+    !refreshReviewsButton ||
+    !reviewSortSelect ||
+    !reviewsVisibleMeta ||
+    !reviewPagination ||
+    !reviewsPrevButton ||
+    !reviewsNextButton ||
+    !reviewsPageStatus
+  ) {
     return;
   }
 
@@ -1002,15 +1106,53 @@ import {
     reviewCount.textContent = String(reviews.length);
   };
 
+  const sortReviews = (reviews, sortMode) => {
+    const sorted = [...reviews];
+
+    switch (sortMode) {
+      case "oldest":
+        sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        break;
+      case "highest":
+        sorted.sort((a, b) => Number(b.rating) - Number(a.rating) || new Date(b.createdAt) - new Date(a.createdAt));
+        break;
+      case "lowest":
+        sorted.sort((a, b) => Number(a.rating) - Number(b.rating) || new Date(b.createdAt) - new Date(a.createdAt));
+        break;
+      case "newest":
+      default:
+        sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        break;
+    }
+
+    return sorted;
+  };
+
   const renderReviews = (reviews) => {
     renderSummary(reviews);
 
     if (!reviews.length) {
       reviewsList.innerHTML = '<div class="empty-state">No reviews yet. Be the first to share your thoughts.</div>';
+      reviewsVisibleMeta.textContent = "Showing 0 reviews.";
+      reviewsPageStatus.textContent = "Page 0 of 0";
+      reviewPagination.hidden = true;
       return;
     }
 
-    reviewsList.innerHTML = reviews
+    const sortedReviews = sortReviews(reviews, currentSort);
+    const totalPages = Math.max(1, Math.ceil(sortedReviews.length / REVIEWS_PER_PAGE));
+    currentPage = Math.min(currentPage, totalPages);
+    const startIndex = (currentPage - 1) * REVIEWS_PER_PAGE;
+    const pagedReviews = sortedReviews.slice(startIndex, startIndex + REVIEWS_PER_PAGE);
+    const endIndex = startIndex + pagedReviews.length;
+
+    reviewsVisibleMeta.textContent = `Showing ${startIndex + 1}-${endIndex} of ${sortedReviews.length} reviews.`;
+    reviewsPageStatus.textContent = `Page ${currentPage} of ${totalPages}`;
+    reviewsPrevButton.disabled = currentPage === 1;
+    reviewsNextButton.disabled = currentPage === totalPages;
+    reviewPagination.hidden = sortedReviews.length <= REVIEWS_PER_PAGE;
+
+    reviewsList.innerHTML = pagedReviews
       .map((review) => {
         const date = new Date(review.createdAt);
         const formattedDate = Number.isNaN(date.getTime())
@@ -1040,11 +1182,13 @@ import {
 
   const loadReviews = async () => {
     reviewsList.innerHTML = '<div class="empty-state">Loading reviews...</div>';
+    reviewsVisibleMeta.textContent = "Loading reviews...";
+    reviewPagination.hidden = true;
 
     try {
       const reviewsQuery = query(reviewsCollection, orderBy("createdAt", "desc"), limit(50));
       const snapshot = await getDocs(reviewsQuery);
-      const reviews = snapshot.docs.map((doc) => {
+      allReviews = snapshot.docs.map((doc) => {
         const data = doc.data();
         return {
           name: String(data.name || "Anonymous"),
@@ -1057,10 +1201,13 @@ import {
         };
       });
 
-      renderReviews(reviews);
+      currentPage = 1;
+      renderReviews(allReviews);
     } catch (error) {
       console.error("Error loading reviews:", error);
       reviewsList.innerHTML = '<div class="empty-state">Reviews are unavailable right now. Check your Firebase Firestore rules and try again.</div>';
+      reviewsVisibleMeta.textContent = "Reviews are unavailable right now.";
+      reviewPagination.hidden = true;
       renderSummary([]);
     }
   };
@@ -1118,6 +1265,31 @@ import {
     loadReviews().then(() => {
       setFeedback("Reviews refreshed.");
     });
+  });
+
+  reviewSortSelect.addEventListener("change", (event) => {
+    currentSort = event.target.value;
+    currentPage = 1;
+    renderReviews(allReviews);
+  });
+
+  reviewsPrevButton.addEventListener("click", () => {
+    if (currentPage === 1) {
+      return;
+    }
+
+    currentPage -= 1;
+    renderReviews(allReviews);
+  });
+
+  reviewsNextButton.addEventListener("click", () => {
+    const totalPages = Math.max(1, Math.ceil(allReviews.length / REVIEWS_PER_PAGE));
+    if (currentPage >= totalPages) {
+      return;
+    }
+
+    currentPage += 1;
+    renderReviews(allReviews);
   });
 
   initializeAnalytics();
