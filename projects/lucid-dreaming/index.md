@@ -74,15 +74,16 @@ permalink: /projects/lucid-dreaming/
     <h2>Read the PDF</h2>
     <p>Download or read the full book in your browser.</p>
     <div class="demo-container">
-      <a href="/assets/lucid-dreaming/pdf/the-art-and-science-of-lucid-dreaming.pdf" class="demo-link" download>
+      <a href="/assets/lucid-dreaming/pdf/the-art-and-science-of-lucid-dreaming.pdf" class="demo-link" download data-track="pdf-download">
         Download PDF
       </a>
-      <a href="/assets/lucid-dreaming/pdf/the-art-and-science-of-lucid-dreaming.pdf" class="demo-link secondary" target="_blank" rel="noopener">
+      <a href="/assets/lucid-dreaming/pdf/the-art-and-science-of-lucid-dreaming.pdf" class="demo-link secondary" target="_blank" rel="noopener" data-track="pdf-open">
         Open in New Tab
       </a>
     </div>
-    <div class="pdf-viewer">
+    <div class="pdf-viewer" id="pdf-viewer">
       <embed
+        id="pdf-embed"
         src="/assets/lucid-dreaming/pdf/the-art-and-science-of-lucid-dreaming.pdf"
         type="application/pdf"
         width="100%"
@@ -98,7 +99,7 @@ permalink: /projects/lucid-dreaming/
       {% for chapter in site.data.lucid_dreaming_chapters %}
       <div class="chapter-item">
         <h3 class="chapter-title">{{ chapter.title }}</h3>
-        <audio controls preload="none" src="/assets/lucid-dreaming/audio/{{ chapter.file }}">
+        <audio controls preload="none" src="/assets/lucid-dreaming/audio/{{ chapter.file }}" data-chapter-title="{{ chapter.title | escape }}" data-chapter-file="{{ chapter.file | escape }}">
           Your browser does not support the audio element.
         </audio>
       </div>
@@ -740,6 +741,7 @@ h2 {
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAnalytics, isSupported, logEvent } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
 import {
   addDoc,
   collection,
@@ -752,6 +754,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 (() => {
+  const pageLabel = "lucid_dreaming_book";
   const firebaseConfig = {
     apiKey: "AIzaSyAM6U2dy7EKF0ey1TO_YV_WmLZ7YbRUdO4",
     authDomain: "journeyhue.firebaseapp.com",
@@ -765,6 +768,7 @@ import {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const reviewsCollection = collection(db, "book_reviews_lucid_dreaming");
+  let analytics = null;
 
   const form = document.getElementById("review-form");
   const reviewsList = document.getElementById("reviews-list");
@@ -773,10 +777,167 @@ import {
   const averageRatingStars = document.getElementById("average-rating-stars");
   const reviewCount = document.getElementById("review-count");
   const refreshReviewsButton = document.getElementById("refresh-reviews");
+  const pdfViewer = document.getElementById("pdf-viewer");
+  const pdfEmbed = document.getElementById("pdf-embed");
+  const audioElements = Array.from(document.querySelectorAll(".chapter-item audio"));
+  const trackedScrollMarks = new Set();
 
   if (!form || !reviewsList || !feedback || !averageRating || !averageRatingStars || !reviewCount || !refreshReviewsButton) {
     return;
   }
+
+  const trackEvent = (eventName, params = {}) => {
+    if (!analytics) {
+      return;
+    }
+
+    try {
+      logEvent(analytics, eventName, {
+        page_name: pageLabel,
+        ...params
+      });
+    } catch (error) {
+      console.error(`Analytics event failed: ${eventName}`, error);
+    }
+  };
+
+  const initializeAnalytics = async () => {
+    try {
+      const supported = await isSupported();
+      if (!supported) {
+        return;
+      }
+
+      analytics = getAnalytics(app);
+      trackEvent("book_page_view", {
+        content_type: "book",
+        content_title: "The Art and Science of Lucid Dreaming"
+      });
+    } catch (error) {
+      console.error("Firebase Analytics is unavailable:", error);
+    }
+  };
+
+  const setupPdfTracking = () => {
+    document.querySelectorAll("[data-track='pdf-download']").forEach((link) => {
+      link.addEventListener("click", () => {
+        trackEvent("book_pdf_download", {
+          action_type: "download",
+          file_name: "the-art-and-science-of-lucid-dreaming.pdf"
+        });
+      });
+    });
+
+    document.querySelectorAll("[data-track='pdf-open']").forEach((link) => {
+      link.addEventListener("click", () => {
+        trackEvent("book_pdf_open_tab", {
+          action_type: "open_new_tab",
+          file_name: "the-art-and-science-of-lucid-dreaming.pdf"
+        });
+      });
+    });
+
+    if (!pdfViewer || !("IntersectionObserver" in window)) {
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries, currentObserver) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        trackEvent("book_pdf_viewer_seen", {
+          action_type: "embed_visible",
+          has_embed: Boolean(pdfEmbed)
+        });
+        currentObserver.disconnect();
+      });
+    }, { threshold: 0.45 });
+
+    observer.observe(pdfViewer);
+  };
+
+  const setupAudioTracking = () => {
+    audioElements.forEach((audio) => {
+      const chapterTitle = audio.dataset.chapterTitle || "Unknown chapter";
+      const chapterFile = audio.dataset.chapterFile || "";
+      const progressMarks = new Set();
+
+      audio.addEventListener("play", () => {
+        if (audio.dataset.playTracked !== "true") {
+          audio.dataset.playTracked = "true";
+          trackEvent("audiobook_chapter_start", {
+            chapter_title: chapterTitle,
+            chapter_file: chapterFile
+          });
+        } else {
+          trackEvent("audiobook_chapter_resume", {
+            chapter_title: chapterTitle,
+            chapter_file: chapterFile
+          });
+        }
+      });
+
+      audio.addEventListener("timeupdate", () => {
+        if (!audio.duration || !Number.isFinite(audio.duration)) {
+          return;
+        }
+
+        const milestones = [25, 50, 75, 95];
+        const percent = Math.round((audio.currentTime / audio.duration) * 100);
+
+        milestones.forEach((milestone) => {
+          if (percent < milestone || progressMarks.has(milestone)) {
+            return;
+          }
+
+          progressMarks.add(milestone);
+          trackEvent("audiobook_chapter_progress", {
+            chapter_title: chapterTitle,
+            chapter_file: chapterFile,
+            progress_percent: milestone
+          });
+        });
+      });
+
+      audio.addEventListener("ended", () => {
+        trackEvent("audiobook_chapter_complete", {
+          chapter_title: chapterTitle,
+          chapter_file: chapterFile
+        });
+      });
+    });
+  };
+
+  const setupEngagementTracking = () => {
+    const startedAt = Date.now();
+
+    window.addEventListener("beforeunload", () => {
+      const seconds = Math.round((Date.now() - startedAt) / 1000);
+      trackEvent("book_page_time_spent", {
+        seconds_spent: seconds
+      });
+    });
+
+    window.addEventListener("scroll", () => {
+      const scrollPercent = Math.min(
+        100,
+        Math.round(((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight) * 100)
+      );
+
+      [25, 50, 75, 100].forEach((mark) => {
+        if (scrollPercent < mark || trackedScrollMarks.has(mark)) {
+          return;
+        }
+
+        trackedScrollMarks.add(mark);
+        trackEvent("book_scroll_depth", {
+          scroll_percent: mark
+        });
+      });
+    }, { passive: true });
+  };
 
   const starString = (rating) => {
     const rounded = Math.round(rating);
@@ -898,6 +1059,10 @@ import {
         createdAt: serverTimestamp()
       });
 
+      trackEvent("book_review_submit", {
+        rating_value: rating
+      });
+
       form.reset();
       setFeedback("Your review is now live for everyone.");
       await loadReviews();
@@ -919,6 +1084,10 @@ import {
     });
   });
 
+  initializeAnalytics();
+  setupPdfTracking();
+  setupAudioTracking();
+  setupEngagementTracking();
   loadReviews();
 })();
 </script>
