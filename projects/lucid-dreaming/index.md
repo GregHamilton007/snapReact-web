@@ -768,7 +768,9 @@ import {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const reviewsCollection = collection(db, "book_reviews_lucid_dreaming");
+  const analyticsEventsCollection = collection(db, "book_analytics_lucid_dreaming");
   let analytics = null;
+  let firestoreAnalyticsAvailable = true;
 
   const form = document.getElementById("review-form");
   const reviewsList = document.getElementById("reviews-list");
@@ -781,24 +783,58 @@ import {
   const pdfEmbed = document.getElementById("pdf-embed");
   const audioElements = Array.from(document.querySelectorAll(".chapter-item audio"));
   const trackedScrollMarks = new Set();
+  const sessionId = (() => {
+    try {
+      const key = "lucid_dreaming_book_session_id";
+      const existing = window.sessionStorage.getItem(key);
+      if (existing) {
+        return existing;
+      }
+
+      const created = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+      window.sessionStorage.setItem(key, created);
+      return created;
+    } catch (error) {
+      return `session-${Date.now()}`;
+    }
+  })();
 
   if (!form || !reviewsList || !feedback || !averageRating || !averageRatingStars || !reviewCount || !refreshReviewsButton) {
     return;
   }
 
-  const trackEvent = (eventName, params = {}) => {
-    if (!analytics) {
+  const persistAnalyticsEvent = (eventName, params = {}) => {
+    if (!firestoreAnalyticsAvailable) {
       return;
     }
 
-    try {
-      logEvent(analytics, eventName, {
-        page_name: pageLabel,
-        ...params
-      });
-    } catch (error) {
-      console.error(`Analytics event failed: ${eventName}`, error);
+    addDoc(analyticsEventsCollection, {
+      eventName,
+      pageName: pageLabel,
+      bookSlug: "lucid-dreaming",
+      sessionId,
+      params,
+      createdAt: serverTimestamp(),
+      path: window.location.pathname
+    }).catch((error) => {
+      firestoreAnalyticsAvailable = false;
+      console.error(`Firestore analytics event failed: ${eventName}`, error);
+    });
+  };
+
+  const trackEvent = (eventName, params = {}) => {
+    if (analytics) {
+      try {
+        logEvent(analytics, eventName, {
+          page_name: pageLabel,
+          ...params
+        });
+      } catch (error) {
+        console.error(`Analytics event failed: ${eventName}`, error);
+      }
     }
+
+    persistAnalyticsEvent(eventName, params);
   };
 
   const initializeAnalytics = async () => {
