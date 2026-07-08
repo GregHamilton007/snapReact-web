@@ -57,6 +57,18 @@ title: algoci - Innovation Hub
     </div>
     <a href="#" class="button disabled">Coming Soon</a>
   </div>
+
+  <div class="project-card">
+    <div class="project-icon">📖</div>
+    <h2>The Art and Science of Lucid Dreaming</h2>
+    <p>A practical guide to becoming aware in your dreams — read the PDF or listen to the full audiobook</p>
+    <div class="project-tags">
+      <span class="tag">Book</span>
+      <span class="tag">Audiobook</span>
+      <span class="tag">Lucid Dreaming</span>
+    </div>
+    <a href="/projects/lucid-dreaming/" class="button">View Book</a>
+  </div>
 </div>
 
 <div class="contact-section">
