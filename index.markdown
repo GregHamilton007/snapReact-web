@@ -11,8 +11,20 @@ title: algoci - Innovation Hub
   <h1>Welcome to algoci</h1>
   <p class="lead">Empowering innovation through technology and data-driven solutions</p>
   <div class="hero-buttons">
-    <a href="#projects" class="button primary">Explore Our Projects</a>
-    <a href="/about-algoci" class="button secondary">About Us</a>
+    <a href="/projects/lucid-dreaming/" class="button primary">Read the Lucid Dreaming Book</a>
+    <a href="#projects" class="button secondary">Explore Our Projects</a>
+  </div>
+</div>
+
+<div class="featured-book">
+  <div class="featured-book-copy">
+    <p class="featured-label">Featured Resource</p>
+    <h2>The Art and Science of Lucid Dreaming</h2>
+    <p>Learn how to lucid dream with a free full-length book and audiobook by Ryan Hamilton. The guide covers dream recall, reality checks, MILD, WBTB, WILD, dream incubation, stabilization, and sleep quality.</p>
+    <div class="featured-book-actions">
+      <a href="/projects/lucid-dreaming/" class="button primary">Open Book Page</a>
+      <a href="/how-to-lucid-dream/" class="button secondary">How to Lucid Dream</a>
+    </div>
   </div>
 </div>
 
@@ -61,7 +73,7 @@ title: algoci - Innovation Hub
   <div class="project-card">
     <div class="project-icon">📖</div>
     <h2>The Art and Science of Lucid Dreaming</h2>
-    <p>A practical guide to becoming aware in your dreams — read the PDF or listen to the full audiobook</p>
+    <p>A free lucid dreaming book and audiobook with step-by-step guidance for people learning how to lucid dream</p>
     <div class="project-tags">
       <span class="tag">Book</span>
       <span class="tag">Audiobook</span>
@@ -201,6 +213,45 @@ title: algoci - Innovation Hub
   margin: 0 auto;
   padding: 4rem 2rem;
   text-align: center;
+}
+
+.featured-book {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem 2rem;
+}
+
+.featured-book-copy {
+  background: linear-gradient(135deg, #fff8e8 0%, #eef6ff 100%);
+  border: 1px solid #d8e4f0;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 16px 40px rgba(21, 50, 75, 0.08);
+}
+
+.featured-label {
+  text-transform: uppercase;
+  letter-spacing: 0.12rem;
+  font-size: 0.8rem;
+  color: #2f6a9d;
+  margin-bottom: 0.75rem;
+}
+
+.featured-book-copy h2 {
+  margin-bottom: 0.75rem;
+}
+
+.featured-book-copy p {
+  color: #34495e;
+  font-size: 1.08rem;
+  line-height: 1.7;
+  max-width: 780px;
+}
+
+.featured-book-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .about-section h2 {
