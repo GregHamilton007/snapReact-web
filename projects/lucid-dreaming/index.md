@@ -900,13 +900,16 @@ import {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const reviewsCollection = collection(db, "book_reviews_lucid_dreaming");
+  const authorFeedbackCollection = collection(db, "author_feedback_lucid_dreaming");
   const analyticsEventsCollection = collection(db, "book_analytics_lucid_dreaming");
   let analytics = null;
   let firestoreAnalyticsAvailable = true;
 
   const form = document.getElementById("review-form");
+  const authorFeedbackForm = document.getElementById("author-feedback-form");
   const reviewsList = document.getElementById("reviews-list");
   const feedback = document.getElementById("review-feedback");
+  const authorFeedbackStatus = document.getElementById("author-feedback-status");
   const averageRating = document.getElementById("average-rating");
   const averageRatingStars = document.getElementById("average-rating-stars");
   const reviewCount = document.getElementById("review-count");
@@ -943,8 +946,10 @@ import {
 
   if (
     !form ||
+    !authorFeedbackForm ||
     !reviewsList ||
     !feedback ||
+    !authorFeedbackStatus ||
     !averageRating ||
     !averageRatingStars ||
     !reviewCount ||
@@ -1312,6 +1317,57 @@ import {
     }
   });
 
+  authorFeedbackForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(authorFeedbackForm);
+    const name = String(formData.get("name") || "").trim();
+    const email = String(formData.get("email") || "").trim();
+    const message = String(formData.get("message") || "").trim();
+
+    if (!message) {
+      authorFeedbackStatus.textContent = "Please add your feedback before sending.";
+      authorFeedbackStatus.style.color = "#b04a4a";
+      return;
+    }
+
+    const submitButton = authorFeedbackForm.querySelector('button[type="submit"]');
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending...";
+    }
+
+    try {
+      await addDoc(authorFeedbackCollection, {
+        pageSlug: "lucid-dreaming",
+        authorName: "Ryan Hamilton",
+        name: name || "Anonymous",
+        email: email || "",
+        message,
+        createdAt: serverTimestamp(),
+        path: window.location.pathname,
+        userAgent: navigator.userAgent
+      });
+
+      trackEvent("author_feedback_submit", {
+        has_email: email ? "yes" : "no"
+      });
+
+      authorFeedbackForm.reset();
+      authorFeedbackStatus.textContent = "Thanks. Your feedback was sent to the author.";
+      authorFeedbackStatus.style.color = "#58708a";
+    } catch (error) {
+      console.error("Error saving author feedback:", error);
+      authorFeedbackStatus.textContent = "Could not send feedback. Make sure Firestore is enabled and your rules allow writes.";
+      authorFeedbackStatus.style.color = "#b04a4a";
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = "Send Feedback";
+      }
+    }
+  });
+
   refreshReviewsButton.addEventListener("click", () => {
     setFeedback("Refreshing reviews...");
     loadReviews().then(() => {
@@ -1350,44 +1406,4 @@ import {
   setupEngagementTracking();
   loadReviews();
 })();
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("author-feedback-form");
-  const status = document.getElementById("author-feedback-status");
-
-  if (!form || !status) {
-    return;
-  }
-
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    const formData = new FormData(form);
-    const name = String(formData.get("name") || "").trim();
-    const email = String(formData.get("email") || "").trim();
-    const message = String(formData.get("message") || "").trim();
-
-    if (!message) {
-      status.textContent = "Please add your feedback before sending.";
-      return;
-    }
-
-    const bodyLines = [
-      "Feedback for Ryan Hamilton",
-      "",
-      "Name: " + (name || "Not provided"),
-      "Email for response: " + (email || "Not provided"),
-      "",
-      "Comments and improvements:",
-      message
-    ];
-
-    const subject = encodeURIComponent("Lucid dreaming page feedback for the author");
-    const body = encodeURIComponent(bodyLines.join("\n"));
-    window.location.href = "mailto:management@algoci.com?subject=" + subject + "&body=" + body;
-    status.textContent = "Your email app should open with the feedback message ready to send.";
-  });
-});
 </script>
