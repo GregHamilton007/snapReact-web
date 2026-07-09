@@ -89,6 +89,30 @@ title: algoci - Innovation Hub
   <a href="mailto:management@algoci.com" class="button primary">Email Us</a>
 </div>
 
+<div class="feedback-section">
+  <div class="feedback-card">
+    <p class="featured-label">Share Feedback</p>
+    <h2>Suggest Improvements or Send Comments to the Author</h2>
+    <p class="feedback-intro">Have an idea, correction, or note for Ryan Hamilton? Send it here. If you want a reply, you can include your email address.</p>
+    <form id="authorFeedbackForm" class="feedback-form">
+      <div class="form-group">
+        <label for="feedback-name">Name</label>
+        <input type="text" id="feedback-name" name="name" placeholder="Your name">
+      </div>
+      <div class="form-group">
+        <label for="feedback-email">Email for a response (optional)</label>
+        <input type="email" id="feedback-email" name="email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label for="feedback-message">Improvements and comments</label>
+        <textarea id="feedback-message" name="message" rows="6" maxlength="1200" placeholder="Share your feedback for the author..." required></textarea>
+      </div>
+      <button type="submit" class="button primary">Send Feedback</button>
+      <p id="feedback-status" class="feedback-status" aria-live="polite"></p>
+    </form>
+  </div>
+</div>
+
 <style>
 .hero {
   text-align: center;
@@ -285,6 +309,70 @@ title: algoci - Innovation Hub
   margin-bottom: 2rem;
 }
 
+.feedback-section {
+  padding: 2rem;
+}
+
+.feedback-card {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem;
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+  border: 1px solid #d7e5f2;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(31, 61, 93, 0.08);
+}
+
+.feedback-card h2 {
+  margin-bottom: 0.75rem;
+  color: #1f3d5d;
+}
+
+.feedback-intro {
+  color: #526577;
+  margin-bottom: 1.75rem;
+}
+
+.feedback-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.form-group {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid #c8d6e5;
+  border-radius: 10px;
+  font: inherit;
+  color: #2c3e50;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+.feedback-status {
+  min-height: 1.5rem;
+  margin: 0;
+  color: #526577;
+}
+
 @media (max-width: 768px) {
   .hero h1 {
     font-size: 3rem;
@@ -301,5 +389,49 @@ title: algoci - Innovation Hub
   .projects-grid {
     grid-template-columns: 1fr;
   }
+
+  .feedback-card {
+    padding: 1.5rem;
+  }
 }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('authorFeedbackForm');
+  const status = document.getElementById('feedback-status');
+
+  if (!form || !status) {
+    return;
+  }
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+    const name = String(formData.get('name') || '').trim();
+    const email = String(formData.get('email') || '').trim();
+    const message = String(formData.get('message') || '').trim();
+
+    if (!message) {
+      status.textContent = 'Please add your feedback before sending.';
+      return;
+    }
+
+    const lines = [
+      'Feedback for Ryan Hamilton',
+      '',
+      'Name: ' + (name || 'Not provided'),
+      'Email for response: ' + (email || 'Not provided'),
+      '',
+      'Comments and improvements:',
+      message
+    ];
+
+    const subject = encodeURIComponent('Website feedback for the author');
+    const body = encodeURIComponent(lines.join('\n'));
+    window.location.href = 'mailto:management@algoci.com?subject=' + subject + '&body=' + body;
+    status.textContent = 'Your email app should open with the feedback message ready to send.';
+  });
+});
+</script>
