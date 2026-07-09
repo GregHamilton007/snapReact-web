@@ -205,6 +205,27 @@ permalink: /projects/lucid-dreaming/
     </div>
   </section>
 
+  <section class="author-feedback-section" aria-labelledby="author-feedback-heading">
+    <div class="author-feedback-card">
+      <p class="section-kicker">Author Feedback</p>
+      <h2 id="author-feedback-heading">Suggest Improvements or Send Comments to the Author</h2>
+      <p class="author-feedback-intro">If you have an idea, correction, or thoughtful comment for Ryan Hamilton, send it here. Include your email only if you would like a response.</p>
+      <form id="author-feedback-form" class="review-form author-feedback-form">
+        <label for="author-feedback-name">Name</label>
+        <input id="author-feedback-name" name="name" type="text" maxlength="80" placeholder="Your name" />
+
+        <label for="author-feedback-email">Email for a response (optional)</label>
+        <input id="author-feedback-email" name="email" type="email" maxlength="120" placeholder="you@example.com" />
+
+        <label for="author-feedback-message">Improvements and comments</label>
+        <textarea id="author-feedback-message" name="message" rows="6" maxlength="1200" placeholder="Share your feedback for the author..." required></textarea>
+
+        <button type="submit" class="demo-link review-submit">Send Feedback</button>
+        <p class="review-form-note" id="author-feedback-status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
   <section class="back-link">
     <a href="/" class="demo-link">Back to algoci</a>
   </section>
@@ -581,6 +602,7 @@ h2 {
 }
 
 .review-form input[type="text"],
+.review-form input[type="email"],
 .review-form textarea {
   width: 100%;
   box-sizing: border-box;
@@ -594,9 +616,39 @@ h2 {
 }
 
 .review-form input[type="text"]:focus,
+.review-form input[type="email"]:focus,
 .review-form textarea:focus {
   outline: 2px solid rgba(52, 152, 219, 0.22);
   border-color: #3498db;
+}
+
+.author-feedback-section {
+  margin-top: 1.75rem;
+}
+
+.author-feedback-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  padding: 1.75rem;
+  box-shadow: 0 14px 40px rgba(52, 73, 94, 0.07);
+}
+
+.section-kicker {
+  margin: 0 0 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #2f7bb8;
+}
+
+.author-feedback-card h2 {
+  margin-bottom: 0.75rem;
+}
+
+.author-feedback-intro {
+  margin-bottom: 1.1rem;
+  color: #58708a;
 }
 
 .rating-fieldset {
@@ -1298,4 +1350,44 @@ import {
   setupEngagementTracking();
   loadReviews();
 })();
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("author-feedback-form");
+  const status = document.getElementById("author-feedback-status");
+
+  if (!form || !status) {
+    return;
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+    const name = String(formData.get("name") || "").trim();
+    const email = String(formData.get("email") || "").trim();
+    const message = String(formData.get("message") || "").trim();
+
+    if (!message) {
+      status.textContent = "Please add your feedback before sending.";
+      return;
+    }
+
+    const bodyLines = [
+      "Feedback for Ryan Hamilton",
+      "",
+      "Name: " + (name || "Not provided"),
+      "Email for response: " + (email || "Not provided"),
+      "",
+      "Comments and improvements:",
+      message
+    ];
+
+    const subject = encodeURIComponent("Lucid dreaming page feedback for the author");
+    const body = encodeURIComponent(bodyLines.join("\n"));
+    window.location.href = "mailto:management@algoci.com?subject=" + subject + "&body=" + body;
+    status.textContent = "Your email app should open with the feedback message ready to send.";
+  });
+});
 </script>
